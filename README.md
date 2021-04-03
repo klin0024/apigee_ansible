@@ -29,7 +29,7 @@ apigee-postgres-replication-resync.yml | 重新同步postgres replication
 
 # env.yml 參數說明
 
-Var                              | Value                   | Description
+Var                              | Value                      | Description
 :--------------------------------|:------------------------|:------------------------
 apigee_release	                 | 4.50.00	               | apigee 版本
 apigee_repository_protocol	     | https://	               | 安裝來源協定
@@ -41,10 +41,7 @@ apigee_analytics_retention_days	 | 180	                   | 分析數據保留�
 apigee_virtual_host_port	     | 9001	                   | apigee gateway port
 apigee_virtual_host_aliases	     | apigateway	           | apigee gateway FQDN
 apigee_license_path	             | license/license.txt	   | license檔案位置
-apigee_topology	                 | - dc-1 ms-ld-ds-0 ms,ds <br> | apigee 角色拓撲 
-                                 | - dc-1 rmp-qs-0 rmp,qs <br>  |
-                                 | - dc-1 ps-master ps <br>     |
-                                 | - dc-1 devportal dp 	        | 
+apigee_topology                  | - dc-1 ms-ld-ds-0 ms,ds<br> - dc-1 rmp-qs-0 rmp,qs<br> - dc-1 ps-master ps<br> - dc-1 devportal dp | apigee 角色拓撲 
 apigee_admin_email	             | admin@apigee.com	       | apigee admin 帳號
 apigee_admin_password	         | Apigee11	               | apigee admin 密碼
 apigee_organization_name	     | apigee	               | 組織名稱
@@ -70,12 +67,9 @@ apigee_smtp_mail_from		     | SMTP MAIL FROM          | 寄件人email
 
 Group                   | Description
 :-----------------------|:---------------------------------------
-apigee	                | 安裝 apigee component <br>
-                        | apigee_msip: 設定連接 management server
-apigee_sso	            | 安裝 apigee sso <br>
-                        | apigee_msip: 設定連接 management server
-apigee_edgeui	        | 安裝 apigee new edge ui <br>
-                        | apigee_msip: 設定連接 management server
+apigee	                | 安裝 apigee component <br> apigee_msip: 設定連接 management server
+apigee_sso	            | 安裝 apigee sso <br> apigee_msip: 設定連接 management server
+apigee_edgeui	        | 安裝 apigee new edge ui <br> apigee_msip: 設定連接 management server
 
 
 
