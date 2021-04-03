@@ -1,5 +1,5 @@
 ---
-- hosts: apigee
+- hosts: apigee_cluster
   become: yes
   serial: 1
   roles:
