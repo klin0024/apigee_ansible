@@ -1,0 +1,16 @@
+---
+- name: Set metadata.xml path
+  set_fact:
+    apigee_sso_saml_idp_metadata_path: "{{ apigee_sso_saml_installation_path }}/metadata.xml"
+
+- name: Copy metadata file
+  copy:
+    src: '{{ saml_idp_metadata_file }}'
+    dest: '{{ apigee_sso_saml_idp_metadata_path }}'
+    owner: apigee
+    group: apigee
+    mode: 0600
+
+- name: Set metadata.xml url
+  set_fact:
+    apigee_sso_saml_idp_metadata_url: "file://{{ apigee_sso_saml_idp_metadata_path }}"    

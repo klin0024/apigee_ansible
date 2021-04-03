@@ -1,0 +1,16 @@
+---
+- name: Create {{ apigee_sso_jwt_installation_path }}
+  file:
+    path: '{{ apigee_sso_jwt_installation_path }}'
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755
+
+- name: Create {{ apigee_sso_saml_installation_path }}
+  file:
+    path: '{{ apigee_sso_saml_installation_path }}'
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755    

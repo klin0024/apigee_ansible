@@ -1,0 +1,3 @@
+---
+- name: stop {{ apigee_component }}
+  command: "/opt/apigee/apigee-service/bin/apigee-service {{ apigee_component }} stop"

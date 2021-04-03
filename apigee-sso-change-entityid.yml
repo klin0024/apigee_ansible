@@ -1,0 +1,26 @@
+---
+- hosts: apigee_sso
+  become: yes
+  tasks:
+  - name: set sso properties
+    lineinfile:
+      dest: /opt/apigee/customer/application/sso.properties
+      regexp: "^{{ item.key }}=.*"
+      line: "{{ item.key }}={{ item.value }}"
+      create: true
+      owner: apigee
+      group: apigee
+      mode: 0644
+    loop:
+    - key: conf_login_entityid
+      value: '{{ apigee_sso_entityid | default(omit) }}'
+    register: sso
+    #when: apigee_sso_entityid is not none
+
+  - name: restart apigee-sso
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-sso restart
+
+     
+
+
+

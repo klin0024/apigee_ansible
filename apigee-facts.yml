@@ -1,0 +1,13 @@
+---
+- hosts: apigee
+  become: yes
+  roles:
+  - apigee-facts
+  tasks:
+  - name: print apigee fact
+    debug:
+      var: apigee
+    #run_once: yes
+
+
+

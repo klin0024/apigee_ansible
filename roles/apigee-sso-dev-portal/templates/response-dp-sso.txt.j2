@@ -1,0 +1,40 @@
+PG_HOST="{{ apigee_devportal_postgresql_host }}"
+PG_USER="{{ apigee_dp_postgresql_username }}"
+PG_PWD="{{ apigee_dp_postgresql_password }}"
+
+DEFAULT_DB="postgres"
+PG_NAME="{{ apigee_dp_db_name }}"
+DRUPAL_PG_USER="{{ apigee_dp_db_username }}"
+DRUPAL_PG_PASS="{{ apigee_dp_db_password }}"
+
+PHP_FPM_PORT="{{ apigee_dp_php_port }}"
+
+SMTPHOST="{{ apigee_dp_smtp_host }}"
+SMTPPORT="{{ apigee_dp_smtp_port }}"
+SMTPUSER="{{ apigee_dp_smtp_user }}"
+SMTPPASSWORD="{{ apigee_dp_smtp_password }}"
+SMTPSSL="{{ 'y' if apigee_dp_smtp_ssl|bool else 'n' }}"
+
+DEVPORTAL_ADMIN_FIRSTNAME="{{ apigee_dp_admin_firstname }}"
+DEVPORTAL_ADMIN_LASTNAME="{{ apigee_dp_admin_lastname }}"
+DEVPORTAL_ADMIN_USERNAME="{{ apigee_dp_admin_username }}"
+DEVPORTAL_ADMIN_EMAIL="{{ apigee_dp_admin_email }}"
+DEVPORTAL_ADMIN_PWD="{{ apigee_dp_admin_password }}"
+
+EDGE_ORG="{{ apigee_dp_ms_organization_name }}"
+MGMT_URL="{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"
+DEVADMIN_USER="{{ apigee_dp_ms_admin_email }}"
+DEVADMIN_PWD="{{ apigee_dp_ms_admin_password }}"
+
+SSO_PUBLIC_URL_SCHEME="{{ apigee_sso_public_url_scheme }}"
+SSO_PUBLIC_URL_HOSTNAME="{{ apigee_sso_public_url_hostname }}"
+SSO_PUBLIC_URL_PORT="{{ apigee_sso_public_url_port }}"
+
+SSO_ADMIN_NAME="{{ apigee_sso_admin_name }}"
+SSO_ADMIN_SECRET="{{ apigee_sso_admin_secret }}"
+
+DEVPORTAL_SSO_ENABLED="{{ apigee_devportal_sso_enabled }}"
+
+PORTALCLI_SSO_CLIENT_NAME="{{ apigee_portalcli_sso_client_name }}"
+PORTALCLI_SSO_CLIENT_SECRET="{{ apigee_portalcli_sso_client_secret }}"
+PORTALCLI_SSO_CLIENT_OVERWRITE="{{ apigee_portalcli_sso_client_overwrite }}"

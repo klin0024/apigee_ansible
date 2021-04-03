@@ -1,0 +1,50 @@
+---
+- hosts: apigee_edgeui
+  become: yes
+  vars:
+    apigee_management_ui_scheme: https
+    apigee_always_run_setup: true
+  roles:
+  - apigee-tls-edgeui
+  - apigee-edgeui
+  tasks:
+  - name: set ui properties
+    lineinfile:
+      dest: /opt/apigee/customer/application/ui.properties
+      regexp: "^{{ item.key }}=.*"
+      line: "{{ item.key }}={{ item.value }}"
+      create: true
+      owner: apigee
+      group: apigee
+      mode: 0644
+    loop:
+    - key: conf_apigee_apigee.mgmt.baseurl
+      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+    - key: conf_apigee-base_apigee.feature.enableforcerangelimit
+      value: '"false"'
+    register: ui
+
+  - name: restart edge-ui
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+    
+  - name: set edge-management-ui properties
+    lineinfile:
+      dest: /opt/apigee/customer/application/management-ui.properties
+      regexp: "^{{ item.key }}=.*"
+      line: "{{ item.key }}={{ item.value }}"
+      create: true
+      owner: apigee
+      group: apigee
+      mode: 0644
+    loop:
+    - key: mgmt_baseurl
+      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+    register: edgeui
+
+  - name: restart edge-management-ui
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-management-ui restart 
+
+     
+
+
+

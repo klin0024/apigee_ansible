@@ -1,0 +1,14 @@
+---
+apigee_ssl_key:
+apigee_ssl_crt:
+
+apigee_ssl_dest_path: /opt/apigee/customer
+apigee_ssl_dest_key: server.key
+apigee_ssl_dest_crt: server.crt
+apigee_ssl_dest_csr: server.csr
+
+
+apigee_ssl_subj: "/C=US/O=google/OU=apigee/CN={{ ansible_fqdn }}"
+apigee_ssl_key_encryption: aes256
+apigee_ssl_encryption: sha256
+apigee_ssl_expiry_days: 7300

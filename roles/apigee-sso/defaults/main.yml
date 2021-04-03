@@ -1,0 +1,87 @@
+---
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+
+apigee_ms_scheme: http
+apigee_msip: 
+apigee_mgmt_port: 8080
+
+apigee_sso_postgresql_host: 
+apigee_sso_postgresql_port: 5432
+apigee_sso_postgresql_user: apigee
+apigee_sso_postgresql_password: "{{ apigee_edge_password }}"
+apigee_sso_postgresql_db_name: apigeesso
+
+apigee_sso_public_url_scheme: http
+apigee_sso_public_url_hostname: "{{ ansible_default_ipv4.address }}"
+apigee_sso_public_url_port: 9099
+
+apigee_sso_tomcat_port: "{{ apigee_sso_public_url_port }}"
+apigee_sso_tomcat_profile: DEFAULT
+
+apigee_sso_admin_name: ssoadmin
+apigee_sso_admin_secret: "{{ apigee_edge_password }}"
+
+apigee_sso_saml_sign_request: "y"
+
+apigee_sso_jwt_installation_path: "{{ apigee_edge_installation_path }}/customer/application/apigee-sso/jwt-keys"
+apigee_sso_jwt_signinig_key_filepath: "{{ apigee_sso_jwt_installation_path }}/privkey.pem"
+apigee_sso_jwt_verification_key_filepath: "{{ apigee_sso_jwt_installation_path }}/pubkey.pem"
+
+# saml / ldap
+apigee_sso_profile: saml
+
+apigee_sso_saml_idp_name: "apigeesso"
+apigee_sso_saml_idp_login_text: "Please log in to your IDP"
+apigee_sso_saml_idp_metadata_url:
+apigee_sso_saml_idpmetaurl_skipsslvalidation: "y"
+apigee_sso_saml_installation_path: "{{ apigee_edge_installation_path }}/customer/application/apigee-sso/saml"
+apigee_sso_saml_service_provider_key: "{{ apigee_sso_saml_installation_path }}/server.key"
+apigee_sso_saml_service_provider_certificate: "{{ apigee_sso_saml_installation_path }}/selfsigned.crt"
+apigee_sso_saml_service_provider_password: 
+
+apigee_sso_saml_signed_assertions: "y"
+
+apigee_enable_autostart: true
+
+apigee_smtp_host:
+apigee_smtp_port: 25
+apigee_smtp_user:
+apigee_smtp_password:
+apigee_smtp_ssl: false
+apigee_smtp_mail_from: noreply@apigee.com
+
+
+
+apigee_sso_jwt_key:
+apigee_sso_jwt_crt:
+
+apigee_sso_saml_key:
+apigee_sso_saml_crt:  
+
+saml_idp_metadata_file: ./metadata.xml
+
+apigee_sso_ldap_profile: indirect
+apigee_sso_ldap_base_url: "ldap://{{ apigee_msip }}:10389"
+apigee_sso_ldap_admin_user_dn: uid=admin,ou=users,ou=global,dc=apigee,dc=com
+apigee_sso_ldap_admin_pwd: "{{ apigee_admin_password }}"
+apigee_sso_ldap_search_base: ou=users,ou=global,dc=apigee,dc=com
+apigee_sso_ldap_search_filter: mail={0}
+apigee_sso_ldap_user_dn_pattern: uid={0},ou=users,ou=global,dc=apigee,dc=com
+apigee_sso_ldap_mail_attribute: mail
+
+apigee_sso_enable_tls: false
+
+apigee_sso_tomcat_keystore_path: "{{ apigee_installation_path }}/customer/application/apigee-sso/tomcat-ssl"
+apigee_sso_tomcat_keystore_filepath: "{{ apigee_sso_tomcat_keystore_path }}/keystore.jks"
+
+#sso_tomcat_keystore_alias: sso
+#sso_tomcat_keystore_password: "{{ apigee_edge_password }}"
+
+apigee_tls_sso_keystore_type: jks
+apigee_tls_sso_keystore_dest: "{{ apigee_sso_tomcat_keystore_filepath }}"
+apigee_tls_sso_keystore_validity: 7300
+apigee_tls_sso_keystore_src:
+apigee_tls_sso_keystore_keyalias: "{{ ansible_fqdn }}"
+apigee_tls_sso_keystore_password: "{{ apigee_edge_password }}"

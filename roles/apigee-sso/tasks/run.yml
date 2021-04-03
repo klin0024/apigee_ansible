@@ -1,0 +1,63 @@
+---
+- block:
+
+  - import_tasks: installation-path.yml
+
+  - import_tasks: jwt-keys.yml
+
+  #- import_tasks: saml-keys.yml
+
+  #- import_role:
+  #    name: apigee-ssl
+  #  vars:
+  #    apigee_ssl_key: "{{ apigee_sso_jwt_key }}"
+  #    apigee_ssl_crt: "{{ apigee_sso_jwt_crt }}"
+  #    apigee_ssl_dest_path: "{{ apigee_sso_jwt_installation_path }}"
+  #    apigee_ssl_dest_key: privkey.pem
+  #    apigee_ssl_dest_crt: pubkey.pem
+
+  - import_role:
+      name: apigee-ssl
+    vars:
+      apigee_ssl_key: "{{ apigee_sso_saml_key }}"
+      apigee_ssl_crt: "{{ apigee_sso_saml_crt }}"
+      apigee_ssl_dest_path: "{{ apigee_sso_saml_installation_path }}"
+      apigee_ssl_dest_key: server.key
+      apigee_ssl_dest_crt: selfsigned.crt
+
+  - import_tasks: metadata-file.yml
+    when: apigee_sso_saml_idp_metadata_url is none          
+
+  - import_role:
+      name: apigee-tmp-dir
+    tags:
+      - response
+      - license
+
+  - block:
+    - import_tasks: keystore.yml
+
+    - set_fact:
+        apigee_sso_tomcat_profile: SSL_TERMINATION
+        apigee_sso_public_url_scheme: https
+        apigee_sso_public_url_hostname: "{{ ansible_fqdn }}"
+        
+    when: apigee_sso_enable_tls    
+
+  - import_tasks: response.yml
+    tags:
+     - response
+
+  - import_tasks: setup.yml
+    tags:
+      - setup 
+
+  - import_role:
+      name: apigee-tmp-dir
+      tasks_from: clean-up.yml
+    tags:
+      - response
+      - license
+
+  become: true
+  become_user: root

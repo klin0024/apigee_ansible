@@ -1,0 +1,37 @@
+HOSTIP="{{ ansible_default_ipv4.address }}"
+
+APIGEE_PORT_HTTP_MS="{{ apigee_port_http_ms }}"
+
+ADMIN_EMAIL="{{ apigee_admin_email }}"
+APIGEE_ADMINPW="{{ apigee_admin_password }}"
+
+REGION="{{ apigee.region }}"
+
+ZK_HOSTS="{{ apigee.zk_client_hosts }}"
+
+CASS_HOSTS="{{ apigee.cass_hosts }}"
+CASS_CLUSTERNAME="{{ apigee_cassandra_cluster_name }}"
+CASS_USERNAME="{{ apigee_cassandra_username }}"
+CASS_PASSWORD="{{ apigee_cassandra_password }}"
+
+PG_USER="{{ apigee_postgresql_user }}"
+PG_PWD="{{ apigee_postgresql_password }}"
+
+MO_PG_HOST="{{ apigee_mo_postgresql_host }}"
+MO_PG_USER="{{ apigee_mo_postgresql_user }}"
+MO_PG_PASSWD="{{ apigee_mo_postgresql_password }}"
+
+
+SKIP_SMTP="{{ 'n' if apigee_smtp_host else 'y' }}"
+{% if apigee_smtp_host %}
+SMTPHOST="{{ apigee_smtp_host }}"
+SMTPPORT="{{ apigee_smtp_port }}"
+{% if apigee_smtp_user %}
+SMTPUSER="{{ apigee_smtp_user }}"
+{% if apigee_smtp_password %}
+SMTPPASSWORD="{{ apigee_smtp_password }}"
+{% endif %}
+{% endif %}
+SMTPSSL="{{ 'y' if apigee_smtp_ssl|bool else 'n' }}"
+{% endif %}
+SMTPMAILFROM="{{ apigee_smtp_mail_from }}"

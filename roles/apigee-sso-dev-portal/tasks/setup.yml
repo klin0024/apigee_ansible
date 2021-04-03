@@ -1,0 +1,16 @@
+---
+- import_tasks: installation-path.yml
+
+- name: Setup developer portal servers
+  shell: '/opt/apigee/apigee-service/bin/apigee-service apigee-drupal-devportal configure-sso -f {{ apigee_dp_response_path }}'
+
+- name: Check for Developer Portal
+  stat:
+    path: /opt/apigee/apigee-drupal-devportal
+  register: apigee_drupal_path
+
+- name: Enable automatic start
+  command: /opt/apigee/apigee-service/bin/apigee-all enable_autostart
+  when: apigee_enable_autostart
+  register: apigee_autostart_result
+  failed_when: apigee_autostart_result.rc != 0 and not apigee_drupal_path.stat.exists

@@ -1,0 +1,16 @@
+---
+- name: Copy ssl key
+  copy:
+    src: '{{ apigee_ssl_devportal_key }}'
+    dest: '{{ apigee_devportal_ssl_path }}/server.key'
+    owner: apigee
+    group: apigee
+    mode: 0600
+
+- name: Copy ssl certificate
+  copy:
+    src: '{{ apigee_ssl_devportal_crt }}'
+    dest: '{{ apigee_devportal_ssl_path }}/server.crt'
+    owner: apigee
+    group: apigee
+    mode: 0600    

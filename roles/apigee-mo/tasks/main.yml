@@ -1,0 +1,8 @@
+---
+- name: Check for Management Server
+  stat:
+    path: /opt/apigee/edge-management-server
+  register: apigee_ms_path
+
+- import_tasks: run.yml
+  when: apigee_ms_path.stat.exists

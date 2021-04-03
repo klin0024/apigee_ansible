@@ -1,0 +1,11 @@
+---
+- hosts: apigee
+  gather_facts: true
+  roles:
+    - apigee-facts
+
+- hosts: apigee
+  gather_facts: false
+  serial: 1
+  roles:
+    - { role: apigee-mo, when: apigee.profiles | intersect(('ms', 'sa')) }

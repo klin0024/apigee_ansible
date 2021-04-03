@@ -1,0 +1,16 @@
+---
+- name: Copy jwt key
+  copy:
+    src: '{{ apigee_sso_jwt_key }}'
+    dest: '{{ apigee_sso_jwt_signinig_key_filepath }}'
+    owner: apigee
+    group: apigee
+    mode: 0600
+
+- name: Copy jwt certificate
+  copy:
+    src: '{{ apigee_sso_jwt_crt }}'
+    dest: '{{ apigee_sso_jwt_verification_key_filepath }}'
+    owner: apigee
+    group: apigee
+    mode: 0600    

@@ -1,0 +1,29 @@
+---
+- name: set apigee_jmx_opts facts
+  set_fact:
+    apigee_jmx_opts: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port={{ apigee_ms_jmx_port }} -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false" 
+  when: apigee_ms_enable_jmx
+
+- name: copy management server start
+  template:
+    src: start.j2
+    dest: "{{ apigee_edge_installation_path }}/edge-management-server/bin/start"
+    owner: apigee
+    group: apigee
+    mode: "0755"
+    backup: yes    
+
+- name: restart management server
+  shell: "{{ apigee_edge_installation_path }}/apigee-service/bin/apigee-service edge-management-server restart"
+
+- name: enable jmx auth
+  shell: "{{ apigee_edge_installation_path }}/apigee-service/bin/apigee-service edge-management-server change_jmx_auth -f {{ apigee_tmp_dir }}/jmx-auth.conf"
+  when:
+  - apigee_ms_enable_jmx 
+  - apigee_jmx_enable_auth
+
+- name: disable jmx auth
+  shell: "{{ apigee_edge_installation_path }}/apigee-service/bin/apigee-service edge-management-server change_jmx_auth -e n"
+  when:
+  - apigee_ms_enable_jmx 
+  - not apigee_jmx_enable_auth    

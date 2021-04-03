@@ -1,0 +1,33 @@
+#!/bin/bash
+
+export working_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $working_dir/lib.sh
+
+check_jvm
+check_profile "$*"
+
+#Disabling this for Mint
+#classpath=
+
+#Allow pre and post tokenization hooks to avoid tweaks to this file.
+check_and_execute PRE_TOKENIZATION_SCRIPT
+
+configLog=/tmp/start_${profile}.log
+echo "USE_TOKENIZED_CONFIG is set to $USE_TOKENIZED_CONFIG" > ${configLog}
+if [ "$USE_TOKENIZED_CONFIG" == "true" ]; then
+   [ -f "$working_dir/update_conf.sh" ] && source $working_dir/update_conf.sh >> ${configLog} 2>&1
+fi
+
+create_classpath
+
+check_and_execute POST_TOKENIZATION_SCRIPT
+
+if [ $max_open_files ]; then
+    ulimit -n $max_open_files
+fi
+
+create_jvm_argslist
+create_xx_options_list
+#echo "DEBUG XX options: $xx_opts\n"
+# Launching java
+exec $JAVA -classpath "$classpath" -Xms$min_mem -Xmx$max_mem $xx_opts -Djava.security.auth.login.config=$conf_path/jaas.config -Dinstallation.dir=$install_dir $sys_props -Dconf.dir=$conf_path -Ddata.dir=$data_dir $ext_jvm_opts $* $debug_options com.apigee.kernel.MicroKernel

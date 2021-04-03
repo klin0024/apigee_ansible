@@ -1,0 +1,35 @@
+---
+- name: Set setup.sh path
+  set_fact:
+    apigee_setup_path: /opt/apigee/apigee-setup/bin/setup.sh
+
+- name: force setup to run
+  file:
+    path: /opt/apigee/customer/.setup-finished/sso
+    state: absent
+  when: apigee_always_run_setup == true
+
+- name: create setup flags directory
+  file:
+    path: /opt/apigee/customer/.setup-finished/sso
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755
+
+- name: Install sendmail
+  package:
+    name: sendmail
+    state: present
+
+- name: Setup apigee sso servers
+  shell: '{{ apigee_setup_path }} -f {{ apigee_sso_response_path }} -p sso && touch /opt/apigee/customer/.setup-finished/sso/sso'
+  args:
+    creates: /opt/apigee/customer/.setup-finished/sso/sso
+
+- import_tasks: setup-ssoadminapi.yml
+
+- name: Enable automatic start
+  command: /opt/apigee/apigee-service/bin/apigee-all enable_autostart
+  when: apigee_enable_autostart
+  ignore_errors: yes

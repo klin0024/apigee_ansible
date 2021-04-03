@@ -1,0 +1,29 @@
+---
+- hosts: apigee
+  become: yes
+  vars:
+    apigee_zk_jmx_port: 2180
+  tasks:
+  - name: Check for zookeeper
+    stat:
+      path: /opt/apigee/apigee-zookeeper
+    register: apigee_zk_path
+      
+  - block:
+    - name: set zookeeper jmx port
+      lineinfile:
+        dest: /opt/apigee/apigee-zookeeper/bin/zkEnv.sh
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - key: JMXPORT
+        value: "{{ apigee_zk_jmx_port }}" 
+
+    - name: restart zookeeper 
+      shell: /opt/apigee/apigee-service/bin/apigee-service apigee-zookeeper restart
+          
+    when: apigee_zk_path.stat.exists

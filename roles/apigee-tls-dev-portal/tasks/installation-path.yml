@@ -1,0 +1,8 @@
+---
+- name: Create {{ apigee_devportal_ssl_path }}
+  file:
+    path: '{{ apigee_devportal_ssl_path }}'
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755

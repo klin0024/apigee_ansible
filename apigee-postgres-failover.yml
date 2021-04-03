@@ -1,0 +1,42 @@
+---
+- hosts: apigee
+  become: yes
+  become_user: apigee
+  vars:
+    pg_master_check: true
+  roles:
+    - apigee-facts
+  tasks:
+  - block:
+    - block:
+      - name: check postgres master
+        ping:
+        ignore_errors: yes
+        register: pg_master
+
+      - name: postgres master status
+        debug:
+          msg: "postgres master is not alive"
+        when: pg_master is failed
+        failed_when: pg_master is failed
+      
+      - name: stop postgres master
+        command: /opt/apigee/apigee-service/bin/apigee-service apigee-postgresql stop  
+
+      when:
+      - ansible_default_ipv4.address == apigee.pg_master
+      - apigee.pg_standby|length > 0
+      - pg_master_check
+
+    - block:
+      - name: postgres standby to master
+        command: "/opt/apigee/apigee-service/bin/apigee-service apigee-postgresql promote-standby-to-master {{ apigee.pg_master }}"      
+      
+      when:
+      - ansible_default_ipv4.address != apigee.pg_master
+      - ansible_default_ipv4.address == apigee.pg_standby[0]   
+
+    when: apigee.profiles | intersect(('ps', 'sax'))
+
+
+

@@ -1,0 +1,13 @@
+---
+- name: set monit properties
+  lineinfile:
+    dest: /opt/apigee/customer/application/monit.properties
+    regexp: "^{{ item.key }}=.*"
+    line: "{{ item.key }}={{ item.value }}"
+    create: true
+    owner: apigee
+    group: apigee
+    mode: 0644
+  loop:
+  - key: conf_monit_httpd_allow
+    value: "{{ apigee_conf_monit_httpd_allow }}"  

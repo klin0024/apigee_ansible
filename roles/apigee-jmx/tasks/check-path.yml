@@ -1,0 +1,25 @@
+---
+- name: Check for management server
+  stat:
+    path: "{{ apigee_edge_installation_path }}/edge-management-server"
+  register: apigee_ms_path
+
+- name: Check for router
+  stat:
+    path: "{{ apigee_edge_installation_path }}/edge-router"
+  register: apigee_router_path
+
+- name: Check for message processor
+  stat:
+    path: "{{ apigee_edge_installation_path }}/edge-message-processor"
+  register: apigee_mp_path
+
+- name: Check for qpid
+  stat:
+    path: "{{ apigee_edge_installation_path }}/edge-qpid-server"
+  register: apigee_qs_path
+
+- name: Check for postgres
+  stat:
+    path: "{{ apigee_edge_installation_path }}/edge-postgres-server"
+  register: apigee_ps_path  

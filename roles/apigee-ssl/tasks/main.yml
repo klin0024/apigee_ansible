@@ -1,0 +1,8 @@
+---
+- import_tasks: copy.yml
+  when:
+  - apigee_ssl_key is not none
+  - apigee_ssl_crt is not none
+
+- import_tasks: create.yml
+  when: ( apigee_ssl_key is none) or ( apigee_ssl_crt is none )

@@ -1,0 +1,30 @@
+---
+- name: Assert whether Private
+  stat:
+    path: "{{ apigee_sso_jwt_signinig_key_filepath }}"
+  register: key
+
+- block:
+  - name: Generate a passphrase
+    command: "openssl rand -base64 48"
+    args:
+      chdir: "{{ apigee_sso_jwt_installation_path }}"
+    register: passphrase
+
+  - name: Generate your private key with a passphrase
+    shell: "openssl genrsa -passout pass:{{ passphrase.stdout }} -out privkey.pem 2048"
+    args:
+      chdir: "{{ apigee_sso_jwt_installation_path }}"
+
+  - name: Remove the passphrase from the key
+    shell: "openssl rsa -in privkey.pem -passin pass:{{ passphrase.stdout }} -out privkey.pem"
+    args:
+      chdir: "{{ apigee_sso_jwt_installation_path }}"
+
+  - name: Generate Verification Key
+    shell: "openssl rsa -pubout -in privkey.pem -out pubkey.pem"
+    args:
+      chdir: "{{ apigee_sso_jwt_installation_path }}"
+
+  become: yes
+  #when: key.stat.exists == False

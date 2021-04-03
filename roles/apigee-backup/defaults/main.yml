@@ -1,0 +1,18 @@
+---
+
+apigee_component_no_stop:
+- apigee-cassandra
+- apigee-postgresql
+
+apigee_component_with_stop:
+- apigee-openldap
+- apigee-qpidd
+- apigee-sso
+- apigee-zookeeper
+- edge-management-server
+- edge-management-ui
+- edge-message-processor
+- edge-postgres-server
+- edge-qpid-server
+- edge-router
+- edge-ui

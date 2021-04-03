@@ -1,0 +1,8 @@
+---
+- name: copy jmx auth config 
+  template:
+    src: jmx-auth.conf.j2
+    dest: "{{ apigee_tmp_dir }}/jmx-auth.conf"
+    owner: apigee
+    group: apigee
+    mode: "0644"

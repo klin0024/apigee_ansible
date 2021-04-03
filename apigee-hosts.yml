@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - block:  
+    - name: apigee_cluster to /etc/hosts
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {% for host in groups["apigee_cluster"] %}
+          {{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].ansible_hostname }} {{ hostvars[host].ansible_fqdn }}
+          {% endfor %}
+        marker: "# {mark} apigee_cluster hosts"
+
+    - name: apigee_public_hostname to /etc/hosts
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {% for host in groups["apigee_public_hostname"] %}
+          {{ hostvars[host].ansible_default_ipv4.address }} {{ hostvars[host].inventory_hostname }}
+          {% endfor %}
+        marker: "# {mark} apigee_public_hostname hosts"
+
+  when: inventory_hostname in groups["apigee_cluster"]      
+

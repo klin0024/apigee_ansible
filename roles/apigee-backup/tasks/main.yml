@@ -1,0 +1,16 @@
+---
+- name: Check for apigee component
+  stat:
+    path: /opt/apigee/{{ apigee_component }}
+  register: apigee_component_path
+
+- block:
+  - name: backup apigee {{ apigee_component }}
+    import_tasks: edge-backup.yml
+    when: apigee_component not in apigee_component_no_stop
+
+  - name: backup apigee {{ apigee_component }}
+    import_tasks: edge-backup-no-stop.yml
+    when: apigee_component in apigee_component_no_stop
+
+  when: apigee_component_path.stat.exists  

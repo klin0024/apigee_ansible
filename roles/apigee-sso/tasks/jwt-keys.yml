@@ -1,0 +1,8 @@
+---
+- import_tasks: copy-jwt-keys.yml
+  when:
+  - apigee_sso_jwt_key is not none
+  - apigee_sso_jwt_crt is not none
+
+- import_tasks: create-jwt-keys.yml
+  when: ( apigee_sso_jwt_key is none ) or ( apigee_sso_jwt_crt is none ) 

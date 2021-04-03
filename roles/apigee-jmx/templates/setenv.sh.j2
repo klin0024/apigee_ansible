@@ -1,0 +1,28 @@
+lib_path=${install_dir}/lib
+conf_path=${install_dir}/conf
+data_dir=${APIGEE_APP_LOGDIR:-${install_dir}/data}
+
+
+
+
+min_mem=256m
+max_mem=2048m
+max_permsize=512m
+reserved_code_cache=256m
+meta_space_size=512m
+# Max open file descriptors the process is permitted to have.
+# The value should be less than the "nofile" value specified in /etc/security/limits.conf
+#
+# Normally a process picks up the value from limits.conf but if the process is managed by
+# the "init" process (by making entries in /etc/inittab) then the configured value gets
+# ignored. In such cases, uncomment the following line and set it to an appropriate value.
+# max_open_files=100000
+#
+# Enable this by default for ASG
+
+##
+# value of this will get appended to java command
+# can be used to add custom system property like -Dprop=value
+# can be used to add extra JVM opts too, like -XX:MaxGCPauseMillis=n
+##
+ext_jvm_opts={{ apigee_jmx_opts }}

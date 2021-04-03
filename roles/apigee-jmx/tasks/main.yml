@@ -1,0 +1,20 @@
+---
+- import_tasks: check-path.yml
+
+- import_tasks: auth-config.yml
+  when: apigee_jmx_enable_auth
+
+- import_tasks: ms.yml
+  when: apigee_ms_path.stat.exists
+
+- import_tasks: router.yml
+  when: apigee_router_path.stat.exists
+
+- import_tasks: mp.yml
+  when: apigee_mp_path.stat.exists
+
+- import_tasks: qs.yml
+  when: apigee_qs_path.stat.exists
+
+- import_tasks: ps.yml
+  when: apigee_ps_path.stat.exists

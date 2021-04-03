@@ -1,0 +1,51 @@
+---
+- hosts: apigee
+  become: yes
+  become_user: apigee
+  roles:
+  - apigee-response-edge
+  tasks:
+  - block:
+    - block:
+      - name: Configure replication access
+        lineinfile:
+          dest: /opt/apigee/customer/application/postgresql.properties
+          regexp: ^conf_pg_hba_replication.connection=.*
+          line: '{{ apigee.pg_trust }}'
+          create: true
+          owner: apigee
+          group: apigee
+          mode: 0644
+        loop: '{{ apigee.profiles }}'
+        when:
+          - apigee.pg_standby|length > 1
+        register: trust
+
+      - name: Restart PostgreSQL master
+        command: /opt/apigee/apigee-service/bin/apigee-service apigee-postgresql restart
+        when: trust.changed
+
+      - name: setup postgres master
+        command: "/opt/apigee/apigee-service/bin/apigee-service apigee-postgresql setup-replication-on-master -f {{ apigee_tmp_dir }}/response-edge.txt"
+      
+      when:
+      - ansible_default_ipv4.address == apigee.pg_master
+      - apigee.pg_standby|length > 0
+
+    - block:
+      - name: stop postgres standby
+        command: /opt/apigee/apigee-service/bin/apigee-service apigee-postgresql stop
+
+      - name: remove postgres standby data
+        shell: rm -rf /opt/apigee/data/apigee-postgresql/
+
+      - name: setup postgres standby
+        command: "/opt/apigee/apigee-service/bin/apigee-service apigee-postgresql setup-replication-on-standby -f {{ apigee_tmp_dir }}/response-edge.txt"
+
+      when:
+      - ansible_default_ipv4.address != apigee.pg_master   
+
+    when: apigee.profiles | intersect(('ps', 'sax'))
+
+
+

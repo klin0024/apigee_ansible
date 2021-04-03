@@ -1,0 +1,23 @@
+---
+# This role will likely fail if not run as root.
+apigee_become_user: root
+
+apigee_tmp_dir: /tmp/apigee
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+
+apigee_management_ui_scheme: https
+apigee_management_ui_ip: "{{ ansible_default_ipv4.address }}"
+apigee_management_ui_port: 3001
+
+apigee_management_ui_tls_offload: "n"
+
+apigee_imanagement_ui_tls_path: "{{ apigee_installation_path }}/customer/application/edge-management-ui"
+apigee_imanagement_ui_tls_key_file: "{{ apigee_imanagement_ui_tls_path }}/server.key"
+apigee_imanagement_ui_tls_cert_file: "{{ apigee_imanagement_ui_tls_path }}/server.crt"
+
+
+
+apigee_ssl_edgeui_key:
+apigee_ssl_edgeui_crt:

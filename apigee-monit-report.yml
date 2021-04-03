@@ -1,0 +1,23 @@
+---
+- hosts: apigee_cluster
+  become: yes
+  become_user: apigee
+  tasks:
+  - name: report
+    shell: /opt/apigee/apigee-service/bin/apigee-service apigee-monit report
+    register: report
+    notify: print report
+
+  - name: summary
+    shell: /opt/apigee/apigee-service/bin/apigee-service apigee-monit summary
+    register: summary
+    notify: print summary 
+
+  handlers:
+  - name: print report
+    debug: 
+      var: report.stdout_lines
+
+  - name: print summary
+    debug: 
+      var: summary.stdout_lines     

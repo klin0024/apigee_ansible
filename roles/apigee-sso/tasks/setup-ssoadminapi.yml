@@ -1,0 +1,8 @@
+---
+- name: install apigee ssoadminapi
+  command: /opt/apigee/apigee-service/bin/apigee-service apigee-ssoadminapi install
+
+#- name: set PATH
+#  copy: 
+#    content: "export PATH=$PATH:/opt/apigee/apigee-ssoadminapi/bin"
+#    dest: /etc/profile.d/apigee-ssoadminapi.sh

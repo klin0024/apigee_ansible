@@ -1,0 +1,8 @@
+---
+- name: Check for devportal
+  stat:
+    path: /opt/apigee/apigee-drupal-devportal
+  register: apigee_devportal_path
+
+- import_tasks: run.yml
+  when: apigee_devportal_path.stat.exists

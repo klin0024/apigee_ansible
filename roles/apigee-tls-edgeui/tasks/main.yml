@@ -1,0 +1,59 @@
+---
+- block:
+
+  - name: Check for newEdge UI
+    stat:
+      path: /opt/apigee/edge-management-ui
+    register: apigee_edgeui_path
+
+  - block:
+
+    - import_role:
+        name: apigee-tmp-dir
+
+    - import_tasks: installation-path.yml
+
+    #- import_tasks: edgeui-ssl.yml
+
+    - import_role:
+        name: apigee-ssl
+      vars:
+        apigee_ssl_key: "{{ apigee_ssl_edgeui_key }}"
+        apigee_ssl_crt: "{{ apigee_ssl_edgeui_crt }}"
+        apigee_ssl_dest_path: "{{ apigee_imanagement_ui_tls_path }}"
+        apigee_ssl_dest_key: server.key
+        apigee_ssl_dest_crt: server.crt   
+
+    - name: Set response file path
+      set_fact:
+        apigee_tls_edgeui_response: '{{ apigee_tmp_dir }}/response-tls-edgeui.txt'
+      tags:
+        - response
+
+    - name: Generate response file
+      template:
+        src: response-tls-edgeui.txt.j2
+        dest: '{{ apigee_tls_edgeui_response }}'
+        owner: apigee
+        group: apigee
+        mode: 0600
+
+    - name: Enable TLS
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-management-ui configure-ssl -f {{ apigee_tls_edgeui_response }}
+    
+    #- name: setup shoehorn
+    #  command: /opt/apigee/apigee-service/bin/apigee-service edge-ui setup -f {{ apigee_tls_edgeui_response }}
+
+    #- name: restart shoehorn
+    #  command: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+
+    always:
+
+    - import_role:
+        name: apigee-tmp-dir
+        tasks_from: clean-up.yml
+
+    when: apigee_edgeui_path.stat.exists
+
+  become: true
+  become_user: '{{ apigee_become_user }}'

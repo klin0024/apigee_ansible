@@ -1,0 +1,23 @@
+---
+- name: set monit properties
+  lineinfile:
+    dest: /opt/apigee/customer/application/monit.properties
+    regexp: "^{{ item.key }}=.*"
+    line: "{{ item.value | default(None) | ternary ( item.key + '=' + item.value, omit ) }}"
+    create: true
+    owner: apigee
+    group: apigee
+    mode: 0644
+  loop:
+  - key: conf_monit_httpd_port
+    value: "{{ apigee_conf_monit_httpd_port }}"
+  - key: conf_monit_monit_datadir
+    value: "{{ apigee_conf_monit_monit_datadir }}"
+  - key: conf_monit_monit_delay_time
+    value: "{{ apigee_conf_monit_monit_delay_time }}"
+  - key: conf_monit_monit_logdir
+    value: "{{ apigee_conf_monit_monit_logdir }}"
+  - key: conf_monit_monit_retry_time
+    value: "{{ apigee_conf_monit_monit_retry_time }}"
+  - key: conf_monit_monit_rundir
+    value: "{{ apigee_conf_monit_monit_rundir }}"

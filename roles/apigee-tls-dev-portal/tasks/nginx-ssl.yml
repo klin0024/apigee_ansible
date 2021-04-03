@@ -1,0 +1,10 @@
+---
+- name: copy nginx ssl
+  import: copy-nginx-ssl.yml
+  when:
+  - apigee_ssl_devportal_key is not none
+  - apigee_ssl_devportal_crt is not none
+
+- name: create nginx ssl
+  when: create-nginx-ssl.yml
+  when: ( apigee_ssl_devportal_key is none ) or ( apigee_ssl_devportal_crt is none )

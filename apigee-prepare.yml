@@ -1,0 +1,83 @@
+---
+- hosts: apigee_cluster
+  become: yes
+  vars:
+    reboot: false
+  tasks:
+  - name: disable SELinux
+    lineinfile:
+      path: /etc/selinux/config
+      regexp: '^SELINUX='
+      line: SELINUX=disabled
+
+  - name: setenforce 0
+    shell: setenforce 0
+    ignore_errors: yes
+
+  - name: disable firewalld
+    systemd:
+      name: firewalld
+      state: stopped
+      enabled: no
+
+  #- name: set PATH
+  #  copy: 
+  #    content: "export PATH=$PATH:/opt/apigee/apigee-service/bin"
+  #    dest: /etc/profile.d/apigee.sh
+
+  - name: backup repos   
+    shell: |
+      for i in $(ls /etc/yum.repos.d/|grep -E '\.repo$'|grep -vE '^(epel|java-1.8.0|centos7|apigee).repo');
+      do
+        mv /etc/yum.repos.d/$i /etc/yum.repos.d/${i}.bak
+      done
+
+  #- name: remove all repos
+  #  shell: rm -rf /etc/yum.repos.d/*
+
+  - name: set private epel repo
+    yum_repository:
+      name: epel
+      description: EPEL YUM repo
+      baseurl: "{{ apigee_repository_protocol }}{{ apigee_repository_address }}{{ apigee_repository_base_path.rstrip('/') }}/epel/$releasever/$basearch/"
+      enabled: yes
+      gpgcheck: no
+
+  - name: set private java-1.8.0 repo
+    yum_repository:
+      name: java-1.8.0
+      description: JAVA 1.8.0 repo
+      baseurl: "{{ apigee_repository_protocol }}{{ apigee_repository_address }}{{ apigee_repository_base_path.rstrip('/') }}/java-1.8.0/"
+      enabled: yes
+      gpgcheck: no
+
+  - name: set private centos7 repo
+    yum_repository:
+      name: centos7
+      description: Centos 7 repo
+      baseurl: "{{ apigee_repository_protocol }}{{ apigee_repository_address }}{{ apigee_repository_base_path.rstrip('/') }}/centos7/"
+      enabled: yes
+      gpgcheck: no      
+
+  - name: clean repos
+    shell: yum clean all; yum repolist    
+
+#  - block:
+#    - name: reboot
+#      shell: sleep 1 && reboot
+#      async: 1
+#      poll: 0
+#      ignore_errors: yes
+
+#    - name: wait for conntetion
+#      wait_for:
+#        host: "{{ inventory_hostname }}"
+#        port: 22
+#        delay: 10
+#        state: started
+#      connection: local
+
+#    when: reboot
+    
+
+

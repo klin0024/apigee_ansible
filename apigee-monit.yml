@@ -1,0 +1,5 @@
+---
+- hosts: apigee_cluster
+  become: yes
+  roles:
+  - apigee-monit

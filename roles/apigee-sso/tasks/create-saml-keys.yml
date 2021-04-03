@@ -1,0 +1,49 @@
+---
+- name: Assert that service provider key file exists
+  stat:
+    path: "{{ apigee_sso_saml_service_provider_key }}"
+  register: key
+
+- block:
+  - name: Generate a passphrase
+    command: "openssl rand -base64 48"
+    args:
+      chdir: "{{ apigee_sso_saml_installation_path }}"
+    register: passphrase
+
+  - name: Generate your private key with a passphrase
+    command: "openssl genrsa -aes256 -passout pass:{{ passphrase.stdout }} -out server.key 2048"
+    args:
+      chdir: "{{ apigee_sso_saml_installation_path }}"
+
+#  - name: Calculate 365 days
+#    command: date -d '+365 days' +%y%m%d%H%M
+#    register: expiry
+#
+#  - name: Generate your private key with a passphrase
+#    openssl_certificate:
+#      path: "{{ sso_saml_service_provider_certificate_file_name }}"
+#      privatekey_path: "{{ sso_saml_service_provider_key_file_path }}"
+#      csr_path: "{{ saml_cert_signing_request_file_name }}"
+#      provider: selfsigned
+#      subject: "{{ saml_cert_subject }}"
+#      state: present
+#      not_after: "{{ expiry.stdout }}"
+
+  - name: Remove the passphrase from the key
+    shell: "openssl rsa -in server.key -passin pass:{{ passphrase.stdout }} -out server.key"
+    args:
+      chdir: "{{ apigee_sso_saml_installation_path }}"
+
+  - name: Generate certificate signing request for CA
+    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }} -key server.key -out server.csr -subj '/C=US/O=google/OU=apigee/CN={{ ansible_fqdn }}'"
+    args:
+      chdir: "{{ apigee_sso_saml_installation_path }}"
+
+  - name: Generate self-signed certificate with 7300 days expiry-time
+    shell: "openssl x509 -sha256 -days 7300 -in server.csr -signkey server.key -out selfsigned.crt"
+    args:
+      chdir: "{{ apigee_sso_saml_installation_path }}"
+
+  become: yes
+  #when: key.stat.exists == false

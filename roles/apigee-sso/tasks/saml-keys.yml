@@ -1,0 +1,8 @@
+---
+- import_tasks: copy-saml-keys.yml
+  when: 
+  - apigee_sso_saml_key is not none
+  - apigee_sso_saml_crt is not none
+
+- import_tasks: create-saml-keys.yml
+  when: ( apigee_sso_saml_key is none ) or ( apigee_sso_saml_crt not none )

@@ -1,0 +1,20 @@
+[Unit]
+Description="Apigee ALL Service starter"
+After=network.target network-online.target
+Requires=network.target network-online.target
+
+[Service]
+#WorkingDirectory=
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=-/opt/apigee/apigee-service/bin/apigee-all stop
+ExecStart=/opt/apigee/apigee-service/bin/apigee-all start
+#ExecStartPost=-
+
+ExecStop=/opt/apigee/apigee-service/bin/apigee-all stop
+
+ExecReload=/opt/apigee/apigee-service/bin/apigee-all restart
+
+[Install]
+WantedBy=multi-user.target

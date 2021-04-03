@@ -1,0 +1,5 @@
+---
+- hosts: apigee
+  become: yes
+  roles:
+  - apigee-jmx

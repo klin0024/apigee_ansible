@@ -1,0 +1,12 @@
+---
+- name: Set Monetization response file path
+  set_fact:
+    apigee_mo_response_path: '{{ apigee_tmp_dir }}/response-mo.txt'
+
+- name: Generate Monetization response file
+  template:
+    src: response-mo.txt.j2
+    dest: '{{ apigee_mo_response_path }}'
+    owner: apigee
+    group: apigee
+    mode: 0600

@@ -1,0 +1,12 @@
+---
+- name: Set edgeui response file path
+  set_fact:
+    apigee_edgeui_response_path: '{{ apigee_tmp_dir }}/response-edgeui.txt'
+
+- name: Generate edgeui response file
+  template:
+    src: response-edgeui.txt.j2
+    dest: '{{ apigee_edgeui_response_path }}'
+    owner: apigee
+    group: apigee
+    mode: 0600

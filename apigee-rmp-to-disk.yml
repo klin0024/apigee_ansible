@@ -1,0 +1,48 @@
+---
+- hosts: apigee
+  become: yes
+#  become_user: apigee
+  vars:
+    apigee_analytics_saveToDisk: "true"
+    apigee_analytics_sendToQueue: "true"
+    apigee_analytics_baseDataDirectoryPath: /opt/apigee/var/log/edge-message-processor/ax
+    apigee_analytics_allocatedDiskSpaceInMBytes: 1024
+    apigee_analytics_uploadToCloud: "false"
+  tasks:
+  - name: Check for message processor
+    stat:
+      path: /opt/apigee/edge-message-processor
+    register: apigee_message_processor_path  
+
+  - block:
+    - name: set message processor env
+      lineinfile:
+        dest: /opt/apigee/customer/application/message-processor.properties
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - key: conf_analytics_analytics.saveToDisk
+        value: '{{ apigee_analytics_saveToDisk }}'
+      #- key: conf_analytics_analytics.sendToQueue
+      #  value: '{{ apigee_analytics_sendToQueue }}'
+      #- key: conf_analytics_analytics.baseDataDirectoryPath
+      #  value: '{{ apigee_analytics_baseDataDirectoryPath }}'
+      - key: conf_analytics_analytics.allocatedDiskSpaceInMBytes
+        value: '{{ apigee_analytics_allocatedDiskSpaceInMBytes }}'
+      - key: conf_analytics_analytics.uploadToCloud
+        value: '{{ apigee_analytics_uploadToCloud }}'
+
+      register: message_processor
+
+    - name: restart message processor
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-message-processor restart 
+      #when: message_processor is changed 
+
+    when: apigee_message_processor_path.stat.exists
+
+
+

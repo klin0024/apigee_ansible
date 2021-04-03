@@ -1,0 +1,38 @@
+---
+- import_tasks: installation-path.yml
+
+#- import_tasks: properties.yml 
+
+- name: enable monit ssl
+  block:
+  - import_tasks: merge-ssl.yml
+
+  - name: set apigee_conf_monit_httpd_allow
+    set_fact:
+      apigee_conf_monit_httpd_allow: |
+        {{ apigee_conf_monit_httpd_allow }}\nssl enable\npemfile {{ apigee_monit_ssl_path }}/{{ apigee_ssl_monit_dest_pem }}
+
+  when: apigee_monit_enable_tls
+
+- import_tasks: properties-tls.yml  
+
+- name: install monit
+  block:
+  - name: install apigee-monit
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit install
+
+  - name: configure apigee-monit
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit configure
+
+  - name: start apigee-monit
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit restart  
+  when: apigee_monit_install | bool
+
+- name: uninstall monit
+  block:
+  - name: stop apigee-monit
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit stop
+
+  - name: uninstall apigee-monit
+    command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit uninstall  
+  when: not apigee_monit_install | bool   

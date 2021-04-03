@@ -1,0 +1,75 @@
+ADMIN_EMAIL="{{ apigee_admin_email }}"
+APIGEE_ADMINPW="{{ apigee_admin_password }}"
+
+MS_SCHEME="{{ apigee_ms_scheme }}"
+MSIP="{{ apigee_msip }}"
+MGMT_PORT="{{ apigee_mgmt_port }}"
+
+PG_HOST="{{ apigee_sso_postgresql_host }}"
+PG_PORT="{{ apigee_sso_postgresql_port }}"
+PG_USER="{{ apigee_sso_postgresql_user }}"
+PG_PWD="{{ apigee_sso_postgresql_password }}"
+SSO_PG_DB_NAME="{{ apigee_sso_postgresql_db_name }}"
+
+SSO_PUBLIC_URL_SCHEME="{{ apigee_sso_public_url_scheme }}"
+SSO_PUBLIC_URL_HOSTNAME="{{ apigee_sso_public_url_hostname }}"
+SSO_PUBLIC_URL_PORT="{{ apigee_sso_public_url_port }}"
+
+SSO_TOMCAT_PORT="{{ apigee_sso_tomcat_port }}"
+SSO_TOMCAT_PROFILE="{{ apigee_sso_tomcat_profile }}"
+
+SSO_ADMIN_NAME="{{ apigee_sso_admin_name }}"
+SSO_ADMIN_SECRET="{{ apigee_sso_admin_secret }}"
+
+SSO_SAML_SIGN_REQUEST="{{ apigee_sso_saml_sign_request }}"
+
+SSO_JWT_SIGNINIG_KEY_FILEPATH="{{ apigee_sso_jwt_signinig_key_filepath }}"
+SSO_JWT_VERIFICATION_KEY_FILEPATH="{{ apigee_sso_jwt_verification_key_filepath }}"
+
+SKIP_SMTP="{{ 'n' if apigee_smtp_host else 'y' }}"
+{% if apigee_smtp_host %}
+SMTPHOST="{{ apigee_smtp_host }}"
+SMTPPORT="{{ apigee_smtp_port }}"
+{% if apigee_smtp_user %}
+SMTPUSER="{{ apigee_smtp_user }}"
+{% if apigee_smtp_password %}
+SMTPPASSWORD="{{ apigee_smtp_password }}"
+{% endif %}
+{% endif %}
+SMTPSSL="{{ 'y' if apigee_smtp_ssl|bool else 'n' }}"
+{% endif %}
+SMTPMAILFROM="{{ apigee_smtp_mail_from }}"
+
+SSO_PROFILE="{{ apigee_sso_profile }}"
+
+{% if apigee_sso_profile == "saml" %}
+SSO_SAML_IDP_NAME="{{ apigee_sso_saml_idp_name }}"
+SSO_SAML_IDP_LOGIN_TEXT="{{ apigee_sso_saml_idp_login_text }}"
+SSO_SAML_IDP_METADATA_URL="{{ apigee_sso_saml_idp_metadata_url }}"
+SSO_SAML_IDPMETAURL_SKIPSSLVALIDATION="{{ apigee_sso_saml_idpmetaurl_skipsslvalidation }}"
+SSO_SAML_SERVICE_PROVIDER_KEY="{{ apigee_sso_saml_service_provider_key }}"
+SSO_SAML_SERVICE_PROVIDER_CERTIFICATE="{{ apigee_sso_saml_service_provider_certificate }}"
+
+{% if apigee_sso_saml_service_provider_password %}
+SSO_SAML_SERVICE_PROVIDER_PASSWORD="{{ apigee_sso_saml_service_provider_password }}"
+{% endif %}
+
+SSO_SAML_SIGNED_ASSERTIONS="{{ apigee_sso_saml_signed_assertions }}"
+{% endif %}
+
+{% if apigee_sso_profile == "ldap" %}
+SSO_LDAP_PROFILE="{{ apigee_sso_ldap_profile }}"
+SSO_LDAP_BASE_URL="{{ apigee_sso_ldap_base_url }}"
+SSO_LDAP_ADMIN_USER_DN="{{ apigee_sso_ldap_admin_user_dn }}"
+SSO_LDAP_ADMIN_PWD="{{ apigee_sso_ldap_admin_pwd }}"
+SSO_LDAP_SEARCH_BASE="{{ apigee_sso_ldap_search_base }}"
+SSO_LDAP_SEARCH_FILTER="{{ apigee_sso_ldap_search_filter }}"
+SSO_LDAP_USER_DN_PATTERN="{{ apigee_sso_ldap_user_dn_pattern }}"
+SSO_LDAP_MAIL_ATTRIBUTE="{{ apigee_sso_ldap_mail_attribute }}"
+{% endif %}
+
+{% if apigee_sso_enable_tls %}
+SSO_TOMCAT_KEYSTORE_FILEPATH="{{ apigee_sso_tomcat_keystore_filepath }}"
+SSO_TOMCAT_KEYSTORE_ALIAS="{{ apigee_tls_sso_keystore_keyalias }}"
+SSO_TOMCAT_KEYSTORE_PASSWORD="{{ apigee_tls_sso_keystore_password }}"
+{% endif %}

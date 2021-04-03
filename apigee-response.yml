@@ -1,0 +1,10 @@
+---
+- hosts: apigee
+  become: yes
+  roles:
+  - apigee-bootstrap
+  - apigee-base
+  - apigee-response-edge
+
+
+

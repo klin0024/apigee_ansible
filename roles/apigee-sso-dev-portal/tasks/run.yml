@@ -1,0 +1,24 @@
+---
+- block:
+
+  - import_role:
+      name: apigee-tmp-dir
+    tags:
+      - response
+
+  - import_tasks: response.yml
+    tags:
+      - response
+
+  - import_tasks: setup.yml
+    tags:
+      - setup
+
+  - import_role:
+      name: apigee-tmp-dir
+      tasks_from: clean-up.yml
+    tags:
+      - response
+
+  become: true
+  become_user: root

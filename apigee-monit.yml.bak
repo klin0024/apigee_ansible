@@ -1,0 +1,60 @@
+---
+- hosts: apigee_cluster
+  become: yes
+  vars:
+    monit_install: true
+    apigee_conf_monit_httpd_port: 2812
+    apigee_conf_monit_httpd_allow: 'allow 0.0.0.0/0'
+    apigee_conf_monit_monit_datadir: /opt/apigee/data/apigee-monit
+    apigee_conf_monit_monit_delay_time: 60
+    apigee_conf_monit_monit_logdir: /opt/apigee/var/log/apigee-monit
+    apigee_conf_monit_monit_retry_time: 60 
+    apigee_conf_monit_monit_rundir: /opt/apigee/var/run/apigee-monit
+  tasks:
+  - block:  
+    - name: install apigee-monit
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit install
+
+    - name: configure apigee-monit
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit configure
+
+    - name: set apigee-monit properties
+      lineinfile:
+        dest: /opt/apigee/customer/application/monit.properties
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      #- key: conf_monit_httpd_port
+      #  value: '{{ apigee_conf_monit_httpd_port }}' 
+      - key: conf_monit_httpd_allow
+        value: '{{ apigee_conf_monit_httpd_allow }}'
+      #- key: conf_monit_monit_datadir
+      #  value: '{{ apigee_conf_monit_monit_datadir }}'
+      #- key: conf_monit_monit_delay_time
+      #  value: '{{ apigee_conf_monit_monit_delay_time }}'
+      #- key: conf_monit_monit_logdir
+      #  value: '{{ apigee_conf_monit_monit_logdir }}'
+      #- key: conf_monit_monit_retry_time
+      #  value: '{{ apigee_conf_monit_monit_retry_time }}'
+      #- key: conf_monit_monit_rundir
+      #  value: '{{ apigee_conf_monit_monit_rundir }}'            
+
+    - name: start apigee-monit
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit restart
+
+    when: monit_install | bool
+
+  - block:
+    - name: stop apigee-monit
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit stop
+
+    - name: uninstall apigee-monit
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-monit uninstall
+
+    when: not monit_install | bool  
+
+

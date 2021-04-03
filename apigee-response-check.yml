@@ -1,0 +1,35 @@
+---
+- hosts: apigee
+  become: yes
+  become_user: apigee
+  roles:
+  - apigee-facts 
+  tasks:
+  - name: print response-edge.txt
+    shell: cat /opt/apigee/conf/response-edge.txt
+
+  - name: print response-dp.txt
+    shell: cat /opt/apigee/conf/response-dp.txt
+    when: ('dp' in apigee.profiles)
+
+  - name: print response-pdb.txt
+    shell: cat /opt/apigee/conf/response-pdb.txt
+    when: ('pdb' in apigee.profiles)
+
+  - block:
+    - name: get response-org list
+      shell: ls -1 /opt/apigee/conf/response-org*.txt 
+      register: response-org
+
+    - name: print {{ item }}
+      shell: "cat /opt/apigee/conf/{{ item }}"
+      loop: response-org.stdout_lines
+
+    when:
+      - apigee.profiles | intersect(('ms', 'sa', 'aio'))
+      - apigee.ms_pause == 0
+
+    
+  
+
+

@@ -1,0 +1,10 @@
+---
+- name: copy edgeui ssl
+  import_tasks: copy-edgeui-ssl.yml
+  when:
+  - apigee_ssl_edgeui_key is not none
+  - apigee_ssl_edgeui_crt is not none
+
+- name: create edgeui ssl
+  import_tasks: create-edgeui-ssl.yml
+  when: ( apigee_ssl_edgeui_key is none ) or ( apigee_ssl_edgeui_crt is none )

@@ -1,0 +1,8 @@
+---
+- name: Create {{ apigee_imanagement_ui_tls_path }}
+  file:
+    path: '{{ apigee_imanagement_ui_tls_path }}'
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755

@@ -1,0 +1,68 @@
+ADMIN_EMAIL="{{ apigee_admin_email }}"
+APIGEE_ADMINPW="{{ apigee_admin_password }}"
+
+MS_SCHEME="{{ apigee_ms_scheme }}"
+MSIP="{{ apigee_msip }}"
+MGMT_PORT="{{ apigee_mgmt_port }}"
+
+EDGEUI_ENABLE_UNIFIED_UI="{{ apigee_edgeui_enable_unified_ui }}"
+
+MANAGEMENT_UI_SCHEME="{{ apigee_management_ui_scheme }}"
+MANAGEMENT_UI_IP="{{ apigee_management_ui_ip }}"
+MANAGEMENT_UI_PORT="{{ apigee_management_ui_port }}"
+
+MANAGEMENT_UI_APP_ENV="{{ apigee_management_ui_app_env }}"
+
+MANAGEMENT_UI_PUBLIC_URIS=$MANAGEMENT_UI_SCHEME://$MANAGEMENT_UI_IP:$MANAGEMENT_UI_PORT
+MANAGEMENT_UI_SSO_REGISTERED_PUBLIC_URIS=$MANAGEMENT_UI_PUBLIC_URIS
+
+MANAGEMENT_UI_SSO_CSRF_SECRET="{{ apigee_management_ui_sso_csrf_secret }}"
+
+MANAGEMENT_UI_SSO_CSRF_EXPIRATION_HOURS="{{ apigee_management_ui_sso_csrf_expiration_hours }}"
+
+MANAGEMENT_UI_SSO_STRICT_TRANSPORT_SECURITY_AGE_HOURS="{{ apigee_management_ui_sso_strict_transport_security_age_hours }}"
+
+MANAGEMENT_UI_SSO_ENABLED="{{ apigee_management_ui_sso_enabled }}"
+MANAGEMENT_UI_SSO_CLIENT_ID="{{ apigee_management_ui_sso_client_id }}"
+MANAGEMENT_UI_SSO_CLIENT_SECRET="{{ apigee_management_ui_sso_client_secret }}"
+MANAGEMENT_UI_SSO_CLIENT_OVERWRITE="{{ apigee_management_ui_sso_client_overwrite }}"
+
+SHOEHORN_SCHEME="{{ apigee_shoehorn_scheme }}"
+SHOEHORN_IP=$MANAGEMENT_UI_IP
+SHOEHORN_PORT="{{ apigee_shoehorn_port }}"
+
+CLASSIC_UI_SCHEME="{{ apigee_classic_ui_scheme }}"
+CLASSIC_UI_IP=$MSIP
+CLASSIC_UI_PORT="{{ apigee_classic_ui_port }}"
+
+EDGEUI_PUBLIC_URIS=$CLASSIC_UI_SCHEME://$CLASSIC_UI_IP:$CLASSIC_UI_PORT
+EDGEUI_SSO_REGISTERD_PUBLIC_URIS=$EDGEUI_PUBLIC_URIS
+
+EDGEUI_SSO_ENABLED="{{ apigee_edge_sso_enabled }}"
+
+EDGEUI_SSO_CLIENT_NAME="{{ apigee_edgeui_sso_client_name }}"
+EDGEUI_SSO_CLIENT_SECRET="{{ apigee_edgeui_sso_client_secret }}"
+EDGEUI_SSO_CLIENT_OVERWRITE="{{ apigee_edgeui_sso_client_overwrite }}"
+
+SSO_PUBLIC_URL_SCHEME="{{ apigee_sso_public_url_scheme }}"
+SSO_PUBLIC_URL_HOSTNAME="{{ apigee_sso_public_url_hostname }}"
+SSO_PUBLIC_URL_PORT="{{ apigee_sso_public_url_port }}"
+
+MANAGEMENT_UI_SKIP_VERIFY="{{ apigee_management_ui_skip_verify }}"
+
+SSO_ADMIN_NAME="{{ apigee_sso_admin_name }}"
+SSO_ADMIN_SECRET="{{ apigee_sso_admin_secret }}"
+
+SKIP_SMTP="{{ 'n' if apigee_smtp_host else 'y' }}"
+{% if apigee_smtp_host %}
+SMTPHOST="{{ apigee_smtp_host }}"
+SMTPPORT="{{ apigee_smtp_port }}"
+{% if apigee_smtp_user %}
+SMTPUSER="{{ apigee_smtp_user }}"
+{% if apigee_smtp_password %}
+SMTPPASSWORD="{{ apigee_smtp_password }}"
+{% endif %}
+{% endif %}
+SMTPSSL="{{ 'y' if apigee_smtp_ssl|bool else 'n' }}"
+{% endif %}
+SMTPMAILFROM="{{ apigee_smtp_mail_from }}"

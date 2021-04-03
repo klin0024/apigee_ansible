@@ -1,0 +1,46 @@
+---
+- hosts: apigee
+  become: yes
+  tasks:
+  - name: Check for devportal
+    stat:
+      path: /opt/apigee/apigee-drupal-devportal
+    register: apigee_devportal_path
+      
+  - block: 
+    - name: link ca.crt
+      file: 
+        src: /etc/pki/ca-trust/source/anchors/ca.crt 
+        dest: /opt/apigee/apigee-drupal-contrib/libraries/mgmt-api-php-sdk/vendor/guzzle/guzzle/src/Guzzle/Http/Resources/cacert.pem
+        force: yes
+        owner: apigee
+        group: apigee
+        state: link
+
+    - name: set MGMT_URL
+      lineinfile:
+        dest: "{{ apigee_tmp_dir }}/response-dp.txt"
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - key: MGMT_URL
+        value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+      - key: PG_HOST
+        value: '"{{ apigee_devportal_postgresql_host }}"' 
+
+    - name: Setup developer portal servers
+      shell: /opt/apigee/apigee-service/bin/apigee-service apigee-drupal-devportal setup -f /opt/apigee/conf/response-dp.txt
+
+    - name: Enable automatic start
+      command: /opt/apigee/apigee-service/bin/apigee-all enable_autostart
+      ignore_errors: yes
+          
+    when: apigee_devportal_path.stat.exists      
+            
+
+
+

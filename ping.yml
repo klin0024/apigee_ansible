@@ -1,0 +1,9 @@
+---
+- hosts: apigee_mirror
+  become: yes
+  tasks:
+  - name: ping
+    ping:
+  
+
+

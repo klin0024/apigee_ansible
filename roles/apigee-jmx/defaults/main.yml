@@ -1,0 +1,33 @@
+---
+# This role will likely fail if not run as root.
+apigee_become_user: root
+apigee_tmp_dir: /tmp/apigee
+apigee_clean_up: true
+apigee_scan_ports: false
+apigee_always_run_setup: false
+
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+
+apigee_jmx_opts: ""
+apigee_jmx_enable_auth: false
+
+apigee_ms_enable_jmx: true
+apigee_ms_jmx_port: 1099
+
+apigee_router_enable_jmx: true
+apigee_router_jmx_port: 1100
+
+apigee_mp_enable_jmx: true
+apigee_mp_jmx_port: 1101
+
+apigee_qs_enable_jmx: true
+apigee_qs_jmx_port: 1102
+
+apigee_ps_enable_jmx: true
+apigee_ps_jmx_port: 1103
+
+ 
+
+

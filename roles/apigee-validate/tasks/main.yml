@@ -1,0 +1,6 @@
+---
+- import_role:
+    name: apigee-facts
+
+- import_tasks: run.yml
+  when: apigee.keys()|length > 0

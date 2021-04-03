@@ -1,0 +1,26 @@
+---
+# This role will likely fail if not run as root.
+apigee_become_user: root
+
+apigee_tmp_dir: /tmp/apigee
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+
+apigee_monit_ssl_path: "{{ apigee_edge_installation_path }}/customer/monit"
+
+apigee_monit_enable_tls: true
+apigee_ssl_monit_key:
+apigee_ssl_monit_crt:
+apigee_ssl_monit_dest_key: server.key
+apigee_ssl_monit_dest_crt: server.crt
+apigee_ssl_monit_dest_pem: server.pem
+
+apigee_monit_install: true
+apigee_conf_monit_httpd_port: 2812
+apigee_conf_monit_httpd_allow: 'allow 0.0.0.0/0'
+apigee_conf_monit_monit_datadir: /opt/apigee/data/apigee-monit
+apigee_conf_monit_monit_delay_time: 60
+apigee_conf_monit_monit_logdir: /opt/apigee/var/log/apigee-monit
+apigee_conf_monit_monit_retry_time: 60 
+apigee_conf_monit_monit_rundir: /opt/apigee/var/run/apigee-monit

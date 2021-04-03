@@ -1,0 +1,7 @@
+docker run -it --rm -v $(pwd):/ansible ansible ansible-playbook apigee-prepare.yml -e @env.yml
+
+docker run -it --rm -v $(pwd):/ansible ansible ansible-playbook apigee-facts.yml -e @env.yml
+
+docker run -it --rm -v $(pwd):/ansible ansible ansible-playbook apigee-build-planet.yml -e @env.yml
+
+docker run -it --rm -v $(pwd):/ansible ansible ansible-playbook apigee-build-edgeui.yml -e @env.yml

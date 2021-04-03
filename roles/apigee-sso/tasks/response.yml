@@ -1,0 +1,12 @@
+---
+- name: Set sso response file path
+  set_fact:
+    apigee_sso_response_path: '{{ apigee_tmp_dir }}/response-sso.txt'
+
+- name: Generate sso response file
+  template:
+    src: response-sso.txt.j2
+    dest: '{{ apigee_sso_response_path }}'
+    owner: apigee
+    group: apigee
+    mode: 0600

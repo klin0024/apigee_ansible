@@ -1,0 +1,8 @@
+---
+- hosts: apigee_sso
+  gather_facts: true
+  serial: 1
+  roles:
+    - apigee-bootstrap
+    - apigee-base
+    - apigee-sso

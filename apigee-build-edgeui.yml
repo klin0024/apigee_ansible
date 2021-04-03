@@ -1,0 +1,7 @@
+---
+- hosts: apigee_edgeui
+  gather_facts: true
+  roles:
+    - apigee-bootstrap
+    - apigee-base
+    - apigee-edgeui

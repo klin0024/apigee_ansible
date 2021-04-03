@@ -1,0 +1,12 @@
+---
+- name: Set developer portal response file path
+  set_fact:
+    apigee_dp_response_path: '{{ apigee_tmp_dir }}/response-dp-sso.txt'
+
+- name: Generate developer portal response file
+  template:
+    src: response-dp-sso.txt.j2
+    dest: '{{ apigee_dp_response_path }}'
+    owner: apigee
+    group: apigee
+    mode: 0600

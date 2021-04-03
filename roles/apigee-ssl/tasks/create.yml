@@ -1,0 +1,49 @@
+---
+- name: Assert that service provider key file exists
+  stat:
+    path: "{{ apigee_ssl_dest_path }}/{{ apigee_ssl_dest_key }}"
+  register: key
+
+- block:
+  - name: Generate a passphrase
+    command: "openssl rand -base64 48"
+    args:
+      chdir: "{{ apigee_ssl_dest_path }}"
+    register: passphrase
+
+  - name: Generate your private key with a passphrase
+    command: "openssl genrsa -{{ apigee_ssl_key_encryption }} -passout pass:{{ passphrase.stdout }} -out {{ apigee_ssl_dest_key }} 2048"
+    args:
+      chdir: "{{ apigee_ssl_dest_path }}"
+
+#  - name: Calculate 365 days
+#    command: date -d '+365 days' +%y%m%d%H%M
+#    register: expiry
+#
+#  - name: Generate your private key with a passphrase
+#    openssl_certificate:
+#      path: "{{ sso_saml_service_provider_certificate_file_name }}"
+#      privatekey_path: "{{ sso_saml_service_provider_key_file_path }}"
+#      csr_path: "{{ saml_cert_signing_request_file_name }}"
+#      provider: selfsigned
+#      subject: "{{ saml_cert_subject }}"
+#      state: present
+#      not_after: "{{ expiry.stdout }}"
+
+  - name: Remove the passphrase from the key
+    shell: "openssl rsa -in {{ apigee_ssl_dest_key }} -passin pass:{{ passphrase.stdout }} -out {{ apigee_ssl_dest_key }}"
+    args:
+      chdir: "{{ apigee_ssl_dest_path }}"
+
+  - name: Generate certificate signing request for CA
+    shell: "openssl req -x509 -{{ apigee_ssl_encryption }} -new -passin pass:{{ passphrase.stdout }}  -key {{ apigee_ssl_dest_key }} -out {{ apigee_ssl_dest_csr }} -subj {{ apigee_ssl_subj }}"
+    args:
+      chdir: "{{ apigee_ssl_dest_path }}"
+
+  - name: Generate self-signed certificate with {{ apigee_ssl_expiry_days }} days expiry-time
+    shell: "openssl x509 -{{ apigee_ssl_encryption }} -days {{ apigee_ssl_expiry_days }} -in {{ apigee_ssl_dest_csr }} -signkey {{ apigee_ssl_dest_key }} -out {{ apigee_ssl_dest_crt }}"
+    args:
+      chdir: "{{ apigee_ssl_dest_path }}"
+
+  become: yes
+  #when: key.stat.exists == false

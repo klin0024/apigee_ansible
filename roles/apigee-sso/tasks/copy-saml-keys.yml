@@ -1,0 +1,16 @@
+---
+- name: Copy service provider key
+  copy:
+    src: '{{ apigee_sso_saml_key }}'
+    dest: '{{ apigee_sso_saml_service_provider_key }}'
+    owner: apigee
+    group: apigee
+    mode: 0600
+
+- name: Copy service provider certificate
+  copy:
+    src: '{{ apigee_sso_saml_crt }}'
+    dest: '{{ apigee_sso_saml_service_provider_certificate }}'
+    owner: apigee
+    group: apigee
+    mode: 0600    

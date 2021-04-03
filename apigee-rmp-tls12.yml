@@ -1,0 +1,69 @@
+---
+- hosts: apigee
+  become: yes
+#  become_user: apigee
+  tasks:
+  - name: Check for router
+    stat:
+      path: /opt/apigee/edge-router
+    register: apigee_router_path
+      
+  - block:
+    - name: set router tls1.2
+      lineinfile:
+        dest: /opt/apigee/customer/application/router.properties
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - key: conf_load_balancing_load.balancing.driver.server.ssl.protocols
+        value: TLSv1.2 
+      register: router
+
+    - name: restart router
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-router restart  
+      #when: router is changed 
+
+    - name: check router tls1.2
+      shell: cat /opt/nginx/conf.d/0-default.conf |grep ssl_protocols   
+
+    when: apigee_router_path.stat.exists
+
+  - name: Check for message processor
+    stat:
+      path: /opt/apigee/edge-message-processor
+    register: apigee_message_processor_path  
+
+  - block:
+    - name: set message processor tls1.2
+      lineinfile:
+        dest: /opt/apigee/customer/application/message-processor.properties
+        regexp: "^{{ item.regexp }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - regexp: conf/system.properties\+https.protocols
+        key: conf/system.properties+https.protocols
+        value: TLSv1.2
+      - regexp: conf/jvmsecurity.properties\+jdk.tls.disabledAlgorithms
+        key: conf/jvmsecurity.properties+jdk.tls.disabledAlgorithms
+        value: SSLv3, TLSv1, TLSv1.1
+      - regexp: conf_message-processor-communication_local.http.ssl.ciphers
+        key: conf_message-processor-communication_local.http.ssl.ciphers
+        value: TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+      register: message_processor
+
+    - name: restart message processor
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-message-processor restart 
+      #when: message_processor is changed 
+
+    when: apigee_message_processor_path.stat.exists
+
+
+

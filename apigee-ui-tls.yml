@@ -1,0 +1,41 @@
+---
+- hosts: apigee
+  become: yes
+  vars:
+    apigee_msip: "{{ ansible_fqdn }}"
+  tasks:
+  - name: Check for Edge UI
+    stat:
+      path: /opt/apigee/edge-ui
+    register: apigee_ui_path
+    
+  - block:
+    - name: set ui to use tls to access ms
+      lineinfile:
+        dest: /opt/apigee/customer/application/ui.properties
+        regexp: "^{{ item.regexp }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0644
+      loop:
+      - regexp: conf_apigee_apigee.mgmt.baseurl
+        key: conf_apigee_apigee.mgmt.baseurl
+        value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+      - regexp: conf/application.conf\+play.ws.ssl.loose.acceptAnyCertificate
+        key: conf/application.conf+play.ws.ssl.loose.acceptAnyCertificate
+        value: "true"
+      - regexp: conf_apigee-base_apigee.feature.enableforcerangelimit
+        key: conf_apigee-base_apigee.feature.enableforcerangelimit
+        value: '"false"'
+      register: edgeui
+
+    - name: restart ui
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+      #when: edgeui is changed 
+
+    when: apigee_ui_path.stat.exists
+
+
+

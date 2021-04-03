@@ -1,0 +1,40 @@
+---
+- name: Set setup.sh path
+  set_fact:
+    apigee_setup_path: /opt/apigee/apigee-setup/bin/setup.sh
+
+- name: force setup to run
+  file:
+    path: /opt/apigee/customer/.setup-finished/mo
+    state: absent
+  when: apigee_always_run_setup == true
+
+- name: create setup flags directory
+  file:
+    path: /opt/apigee/customer/.setup-finished/mo
+    state: directory
+    owner: apigee
+    group: apigee
+    mode: 0755
+
+- import_tasks: installation-path.yml
+
+- name: Install sendmail
+  package:
+    name: sendmail
+    state: present
+
+- name: Setup Monetization servers
+  shell: '{{ apigee_setup_path }} -f {{ apigee_mo_response_path }} -p mo && touch /opt/apigee/customer/.setup-finished/mo/mo'
+  args:
+    creates: /opt/apigee/customer/.setup-finished/mo/mo
+
+- name: Enable automatic start
+  command: /opt/apigee/apigee-service/bin/apigee-all enable_autostart
+  when: apigee_enable_autostart
+
+- name: configure management cluster
+  shell: /opt/apigee/apigee-service/bin/apigee-service edge-mint-management-server mint-configure-mgmt-cluster
+
+- name: restart management server
+  shell: /opt/apigee/apigee-service/bin/apigee-service edge-management-server restart

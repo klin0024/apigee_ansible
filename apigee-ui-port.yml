@@ -1,0 +1,43 @@
+---
+- hosts: apigee_edgeui
+  become: yes
+  vars:
+    apigee_shoehorn_address: "{{ ansible_default_ipv4.address }}"
+    apigee_shoehorn_port: 9000
+    apigee_always_run_setup: true
+  pre_tasks:
+  - name: Check for Edge UI
+    stat:
+      path: /opt/apigee/edge-ui
+    register: apigee_ui_path
+      
+  - block:
+    #- name: set ui.sh
+    #  copy:
+    #    dest: /opt/apigee/customer/edge-ui.d/ui.sh
+    #    content: 'export JAVA_OPTS="-Dhttp.address={{ apigee_shoehorn_address }} -Dhttp.port={{ apigee_shoehorn_port }}"'
+    #    owner: apigee
+    #    group: apigee
+    #    mode: 0644
+    
+    - name: set JAVA_OPTS
+      lineinfile:
+        dest: /opt/apigee/edge-ui/bin/enterpriseui
+        insertafter: "/usr/bin/env bash"
+        regexp: "^{{ item.key }}=.*"
+        line: "{{ item.key }}={{ item.value }}"
+        create: true
+        owner: apigee
+        group: apigee
+        mode: 0755
+      loop:
+      - key: JAVA_OPTS
+        value: '"-Dhttp.address={{ apigee_shoehorn_address }} -Dhttp.port={{ apigee_shoehorn_port }}"'
+
+    - name: restart ui 
+      shell: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+          
+    when: apigee_ui_path.stat.exists
+
+  roles:
+    - apigee-edgeui

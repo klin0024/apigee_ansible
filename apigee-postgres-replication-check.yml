@@ -1,0 +1,63 @@
+---
+- hosts: apigee
+  become: yes
+  become_user: apigee
+  roles:
+    - apigee-facts
+  tasks:
+  - block:
+    - block:
+      - name: check postgres master
+        shell: /opt/apigee/apigee-service/bin/apigee-service apigee-postgresql postgres-check-master
+      
+      - name: query postgres master
+        shell: psql -c 'select * from pg_stat_replication'
+        environment:
+          PGHOST: localhost
+          PGUSER: apigee
+          PGPASSWORD: "{{ apigee_postgresql_password }}"
+          PGDATABASE: apigee
+        register: pgmaster
+        notify: print master query
+
+      #- name: print master query
+      #  debug:
+      #    var: pgmaster.stdout_lines  
+
+      when:
+      - ansible_default_ipv4.address == apigee.pg_master
+      - apigee.pg_standby|length > 0
+
+    - block:
+      - name: check postgres standby
+        shell: /opt/apigee/apigee-service/bin/apigee-service apigee-postgresql postgres-check-standby
+
+      - name: query postgres standby
+        shell: psql -c 'select * from pg_stat_wal_receiver'
+        environment:
+          PGHOST: localhost
+          PGUSER: apigee
+          PGPASSWORD: "{{ apigee_postgresql_password }}"
+          PGDATABASE: apigee
+        register: pgstandby
+        notify: print standby query
+
+      #- name: print standby query
+      #  debug:
+      #    var: pgstandby.stdout_lines      
+      
+      when:
+      - ansible_default_ipv4.address != apigee.pg_master   
+
+    when: apigee.profiles | intersect(('ps', 'sax'))
+
+  handlers:
+  - name: print master query
+    debug:
+      var: pgmaster.stdout_lines
+
+  - name: print standby query
+    debug:
+      var: pgstandby.stdout_lines      
+
+
