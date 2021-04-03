@@ -75,4 +75,6 @@ apigee_edgeui	        | 安裝 apigee new edge ui <br> apigee_msip: 設定連接
 
 # 使用說明
 
+cd apigee_ansible
+
 ansible-playbook -i inventory/inventory.ini apigee-prepare.yml -e @inventory/env.yml

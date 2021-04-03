@@ -1,21 +1,22 @@
 ---
 - hosts: apigee
   become: yes
+  serial: 1
   roles:
-  - apigee-facts
-  - { role: apigee-backup, apigee_component: apigee-cassandra, when: apigee.profiles | intersect(('ds', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: apigee-postgresql, wnen: apigee.profiles | intersect(('ps', sax', 'aio'))}
-  - { role: apigee-backup, apigee_component: apigee-openldap, wnen: apigee.profiles | intersect(('ld', 'ms', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: apigee-qpidd, wnen: apigee.profiles | intersect(('qs', sax', 'aio'))} 
-  #- { role: apigee-backup, apigee_component: apigee-sso}
-  - { role: apigee-backup, apigee_component: apigee-zookeeper, when: apigee.profiles | intersect(('ds', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-management-server, when: apigee.profiles | intersect(('ms', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-management-ui, when: apigee.profiles | intersect(('ms', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-message-processor, when: apigee.profiles | intersect(('mp', 'rmp', 'sa', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-postgres-server, wnen: apigee.profiles | intersect(('ps', sax', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-qpid-server, wnen: apigee.profiles | intersect(('qs', sax', 'aio'))}
-  - { role: apigee-backup, apigee_component: edge-router, when: apigee.profiles | intersect(('r', 'rmp', 'sa', 'aio'))}
-  #- { role: apigee-backup, apigee_component: edge-ui}
+  - { name: apigee-backup, apigee_component: apigee-cassandra }
+  - { name: apigee-backup, apigee_component: apigee-zookeeper }
+  - { name: apigee-backup, apigee_component: apigee-postgresql }
+  - { name: apigee-backup, apigee_component: apigee-openldap }
+  - { name: apigee-backup, apigee_component: apigee-qpidd } 
+  - { name: apigee-backup, apigee_component: apigee-postgresql }  
+  - { name: apigee-backup, apigee_component: edge-management-server }
+  - { role: apigee-backup, apigee_component: edge-router }
+  - { name: apigee-backup, apigee_component: edge-message-processor }
+  - { role: apigee-backup, apigee_component: edge-postgres-server }
+  - { role: apigee-backup, apigee_component: edge-qpid-server }
+  - { role: apigee-backup, apigee_component: apigee-sso}
+  - { role: apigee-backup, apigee_component: edge-management-ui }
+  - { role: apigee-backup, apigee_component: edge-ui}
 
 
 
