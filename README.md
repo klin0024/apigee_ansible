@@ -21,6 +21,7 @@ apigee-monit.yml                       | 安裝apigee monit
 apigee-start.yml                       | 開啟apigee
 apigee-stop.yml                        | 關閉apigee
 apigee-build-mirror.yml                | 建立安裝來源鏡像
+apigee-backup.yml                      | apigee 備份
 apigee-monit-report.yml                | apigee monit report
 apigee-postgres-replication-check.yml  | 檢查postgres replication
 apigee-postgres-failover.yml           | 切換postgres
