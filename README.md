@@ -42,7 +42,7 @@ apigee_analytics_retention_days	 | 180	                   | 分析數據保留�
 apigee_virtual_host_port	     | 9001	                   | apigee gateway port
 apigee_virtual_host_aliases	     | apigateway	           | apigee gateway FQDN
 apigee_license_path	             | license/license.txt	   | license檔案位置
-apigee_topology                  | - dc-1 ms-ld-ds-0 ms,ds<br> - dc-1 rmp-qs-0 rmp,qs<br> - dc-1 ps-master ps<br> - dc-1 devportal dp | apigee 角色拓撲 
+apigee_topology                  | - dc-1 ms-ld-ds-0 ms,ds <br> - dc-1 rmp-qs-0 rmp,qs <br> - dc-1 ps-master ps <br> - dc-1 devportal dp | apigee 角色拓撲 
 apigee_admin_email	             | admin@apigee.com	       | apigee admin 帳號
 apigee_admin_password	         | Apigee11	               | apigee admin 密碼
 apigee_organization_name	     | apigee	               | 組織名稱
@@ -52,7 +52,7 @@ apigee_keystore_keyalias	     | apigee	               | keystore 別名
 apigee_keystore_src	             | ssl/keystore.jks	       | keystore 檔案位置
 apigee_ssl_key_src	             | ssl/server.key	       | ssl key 檔案位置
 apigee_ssl_crt_src	             | ssl/server.crt	       | ssl cert 檔案位置
-apigee_sso_saml_idp_metadata_url | IDP MEDDATA URL         | saml metadata 檔案位置
+apigee_sso_saml_idp_metadata_url | IDP METADATA URL        | saml metadata 檔案位置
 apigee_public_postgresql_host	 | ps-master               | postgres FQDN
 apigee_sso_entityid		         | SP ENTITYID             | apigee sso entityid
 apigee_sso_public_url_hostname	 | edgeui	               | apigee sso FQDN
