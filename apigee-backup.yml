@@ -10,13 +10,13 @@
   - { name: apigee-backup, apigee_component: apigee-qpidd } 
   - { name: apigee-backup, apigee_component: apigee-postgresql }  
   - { name: apigee-backup, apigee_component: edge-management-server }
-  - { role: apigee-backup, apigee_component: edge-router }
+  - { name: apigee-backup, apigee_component: edge-router }
   - { name: apigee-backup, apigee_component: edge-message-processor }
-  - { role: apigee-backup, apigee_component: edge-postgres-server }
-  - { role: apigee-backup, apigee_component: edge-qpid-server }
-  - { role: apigee-backup, apigee_component: apigee-sso}
-  - { role: apigee-backup, apigee_component: edge-management-ui }
-  - { role: apigee-backup, apigee_component: edge-ui}
+  - { name: apigee-backup, apigee_component: edge-postgres-server }
+  - { name: apigee-backup, apigee_component: edge-qpid-server }
+  - { name: apigee-backup, apigee_component: apigee-sso}
+  - { name: apigee-backup, apigee_component: edge-management-ui }
+  - { name: apigee-backup, apigee_component: edge-ui}
 
 
 
