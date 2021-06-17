@@ -73,7 +73,7 @@ apigee_sso_ldap_mail_attribute: mail
 
 apigee_sso_enable_tls: false
 
-apigee_sso_tomcat_keystore_path: "{{ apigee_installation_path }}/customer/application/apigee-sso/tomcat-ssl"
+apigee_sso_tomcat_keystore_path: "{{ apigee_edge_installation_path }}/customer/application/apigee-sso/tomcat-ssl"
 apigee_sso_tomcat_keystore_filepath: "{{ apigee_sso_tomcat_keystore_path }}/keystore.jks"
 
 #sso_tomcat_keystore_alias: sso

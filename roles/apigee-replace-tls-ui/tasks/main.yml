@@ -1,0 +1,27 @@
+---
+- block:
+
+  - name: Check for Edge UI
+    stat:
+      path: /opt/apigee/edge-ui
+    register: apigee_ui_path
+
+  - block:
+
+    - import_role:
+        name: apigee-tls-keystore
+      vars:
+        - apigee_tls_keystore_type: '{{ apigee_tls_ui_keystore_type }}'
+        - apigee_tls_keystore_dest: '{{ apigee_tls_ui_keystore_dest }}'
+        - apigee_tls_keystore_validity: '{{ apigee_tls_ui_keystore_validity }}'
+        - apigee_tls_keystore_src: '{{ apigee_tls_ui_keystore_src }}'
+        - apigee_tls_keystore_keyalias: '{{ apigee_tls_ui_keystore_keyalias }}'
+        - apigee_tls_keystore_password: '{{ apigee_tls_ui_keystore_password }}'
+
+    - name: edge-ui restart
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
+
+    when: apigee_ui_path.stat.exists
+
+  become: true
+  become_user: '{{ apigee_become_user }}'

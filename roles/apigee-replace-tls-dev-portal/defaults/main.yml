@@ -1,0 +1,17 @@
+---
+# This role will likely fail if not run as root.
+apigee_become_user: root
+
+apigee_tmp_dir: /tmp/apigee
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+
+apigee_devportal_ssl_path: "{{ apigee_edge_installation_path }}/customer/nginx/ssl"
+
+
+
+apigee_ssl_devportal_key:
+apigee_ssl_devportal_crt:
+
+apigee_devportal_port: 8443

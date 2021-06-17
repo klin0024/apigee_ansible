@@ -1,0 +1,26 @@
+---
+- block:
+
+  - name: Check for devportal
+    stat:
+      path: /opt/apigee/apigee-drupal-devportal
+    register: apigee_devportal_path
+
+  - block:
+    
+    - import_role:
+        name: apigee-ssl
+      vars:
+        apigee_ssl_key: "{{ apigee_ssl_devportal_key }}"
+        apigee_ssl_crt: "{{ apigee_ssl_devportal_crt }}"
+        apigee_ssl_dest_path: "{{ apigee_devportal_ssl_path }}"
+        apigee_ssl_dest_key: server.key
+        apigee_ssl_dest_crt: server.crt 
+
+    - name: restart devportal
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-drupal-devportal restart
+
+    when: apigee_devportal_path.stat.exists
+
+  become: true
+  become_user: '{{ apigee_become_user }}'

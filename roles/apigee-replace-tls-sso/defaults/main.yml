@@ -1,0 +1,16 @@
+---
+apigee_become_user: root
+
+apigee_installation_path: /opt
+apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
+apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
+apigee_sso_tomcat_keystore_path: "{{ apigee_edge_installation_path }}/customer/application/apigee-sso/tomcat-ssl"
+apigee_sso_tomcat_keystore_filepath: "{{ apigee_sso_tomcat_keystore_path }}/keystore.jks"
+
+apigee_tls_sso_keystore_type: jks
+apigee_tls_sso_keystore_dest: "{{ apigee_sso_tomcat_keystore_filepath }}"
+apigee_tls_sso_keystore_validity: 7300
+apigee_tls_sso_keystore_src:
+apigee_tls_sso_keystore_keyalias: "{{ ansible_fqdn }}"
+apigee_tls_sso_keystore_password: "{{ apigee_edge_password }}"
+

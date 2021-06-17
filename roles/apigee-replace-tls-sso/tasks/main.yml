@@ -1,0 +1,27 @@
+---
+- block:
+
+  - name: Check for sso
+    stat:
+      path: /opt/apigee/apigee-sso
+    register: apigee_sso_path
+
+  - block:
+
+    - import_role:
+        name: apigee-tls-keystore
+      vars:
+        - apigee_tls_keystore_type: '{{ apigee_tls_sso_keystore_type }}'
+        - apigee_tls_keystore_dest: '{{ apigee_tls_sso_keystore_dest }}'
+        - apigee_tls_keystore_validity: '{{ apigee_tls_sso_keystore_validity }}'
+        - apigee_tls_keystore_src: '{{ apigee_tls_sso_keystore_src }}'
+        - apigee_tls_keystore_keyalias: '{{ apigee_tls_sso_keystore_keyalias }}'
+        - apigee_tls_keystore_password: '{{ apigee_tls_sso_keystore_password }}'
+    
+    - name: Restart sso
+      command: /opt/apigee/apigee-service/bin/apigee-service apigee-sso restart
+        
+    when: apigee_sso_path.stat.exists   
+
+  become: true
+  become_user: '{{ apigee_become_user }}'

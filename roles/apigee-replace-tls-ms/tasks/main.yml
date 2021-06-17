@@ -1,0 +1,27 @@
+---
+- block:
+
+  - name: Check for management server
+    stat:
+      path: /opt/apigee/edge-management-server
+    register: apigee_ms_path
+
+  - block:
+
+    - import_role:
+        name: apigee-tls-keystore
+      vars:
+        - apigee_tls_keystore_type: '{{ apigee_tls_ms_keystore_type }}'
+        - apigee_tls_keystore_dest: '{{ apigee_tls_ms_keystore_dest }}'
+        - apigee_tls_keystore_validity: '{{ apigee_tls_ms_keystore_validity }}'
+        - apigee_tls_keystore_src: '{{ apigee_tls_ms_keystore_src }}'
+        - apigee_tls_keystore_keyalias: '{{ apigee_tls_ms_keystore_keyalias }}'
+        - apigee_tls_keystore_password: '{{ apigee_tls_ms_keystore_password }}'
+
+    - name: edge-management-server restart
+      command: /opt/apigee/apigee-service/bin/apigee-service edge-management-server restart
+
+    when: apigee_ms_path.stat.exists
+
+  become: true
+  become_user: '{{ apigee_become_user }}'

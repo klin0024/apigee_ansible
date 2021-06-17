@@ -1,0 +1,14 @@
+
+MANAGEMENT_UI_SCHEME="{{ apigee_management_ui_scheme }}"
+MANAGEMENT_UI_IP="{{ apigee_management_ui_ip }}"
+MANAGEMENT_UI_PORT="{{ apigee_management_ui_port }}"
+
+MANAGEMENT_UI_TLS_OFFLOAD="{{ apigee_management_ui_tls_offload }}"
+
+# Specify the key and cert. 
+MANAGEMENT_UI_TLS_KEY_FILE="{{ apigee_imanagement_ui_tls_key_file }}"
+MANAGEMENT_UI_TLS_CERT_FILE="{{ apigee_imanagement_ui_tls_cert_file }}"
+
+
+MANAGEMENT_UI_PUBLIC_URIS=$MANAGEMENT_UI_SCHEME://$MANAGEMENT_UI_IP:$MANAGEMENT_UI_PORT
+SHOEHORN_SCHEME=http
