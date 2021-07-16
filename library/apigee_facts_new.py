@@ -241,10 +241,11 @@ def get_apigee_facts(hostvars, topology, my_hostname):
 
     ldap_services = planet.get_services('OpenLDAP')
     ldap_hosts = [service.host for service in ldap_services]
-    ldap_replication = len(ldap_services) > 1
+    #ldap_replication = len(ldap_services) > 1
 
     ms_hosts = [service.host for service in planet.get_services('ManagementServer')]
     ldap_only_hosts = [host for host in ldap_hosts if host not in ms_hosts]
+    ldap_replication = len(ldap_only_hosts) > 1
 
     if me in ldap_hosts:
         if not ldap_replication:
