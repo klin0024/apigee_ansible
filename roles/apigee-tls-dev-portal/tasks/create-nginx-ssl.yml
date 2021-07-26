@@ -1,7 +1,7 @@
 ---
 - name: Assert that service provider key file exists
   stat:
-    path: "{{ apigee_devportal_ssl_path }}/server.key"
+    path: "{{ apigee_devportal_ssl_key }}"
   register: key
 
 - block:
@@ -12,7 +12,7 @@
     register: passphrase
 
   - name: Generate your private key with a passphrase
-    command: "openssl genrsa -aes256 -passout pass:{{ passphrase.stdout }} -out server.key 2048"
+    command: "openssl genrsa -aes256 -passout pass:{{ passphrase.stdout }} -out {{ apigee_devportal_ssl_key_name }} 2048"
     args:
       chdir: "{{ apigee_devportal_ssl_path }}"
 
@@ -31,17 +31,17 @@
 #      not_after: "{{ expiry.stdout }}"
 
   - name: Remove the passphrase from the key
-    shell: "openssl rsa -in server.key -passin pass:{{ passphrase.stdout }} -out server.key"
+    shell: "openssl rsa -in server.key -passin pass:{{ passphrase.stdout }} -out {{ apigee_devportal_ssl_key_name }}"
     args:
       chdir: "{{ apigee_devportal_ssl_path }}"
 
   - name: Generate certificate signing request for CA
-    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key server.key -out server.csr -subj '/C=US/O=google/OU=apigee/CN={{ ansible_fqdn }}'"
+    shell: "openssl req -x509 -sha256 -new -passin pass:{{ passphrase.stdout }}  -key {{ apigee_devportal_ssl_key_name }} -out server.csr -subj '/C=US/O=google/OU=apigee/CN={{ ansible_fqdn }}'"
     args:
       chdir: "{{ apigee_devportal_ssl_path }}"
 
   - name: Generate self-signed certificate with 7300 days expiry-time
-    shell: "openssl x509 -sha256 -days 7300 -in server.csr -signkey server.key -out server.crt"
+    shell: "openssl x509 -sha256 -days 7300 -in server.csr -signkey {{ apigee_devportal_ssl_key_name }} -out {{ apigee_devportal_ssl_crt_name }}"
     args:
       chdir: "{{ apigee_devportal_ssl_path }}"
 

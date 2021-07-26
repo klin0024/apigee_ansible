@@ -19,8 +19,8 @@
         apigee_ssl_key: "{{ apigee_ssl_devportal_key }}"
         apigee_ssl_crt: "{{ apigee_ssl_devportal_crt }}"
         apigee_ssl_dest_path: "{{ apigee_devportal_ssl_path }}"
-        apigee_ssl_dest_key: server.key
-        apigee_ssl_dest_crt: server.crt 
+        apigee_ssl_dest_key: "{{ apigee_devportal_ssl_key_name }}"
+        apigee_ssl_dest_crt: "{{ apigee_devportal_ssl_crt_name }}" 
 
     - name: restart devportal
       command: /opt/apigee/apigee-service/bin/apigee-service apigee-drupal-devportal restart

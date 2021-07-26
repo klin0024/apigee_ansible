@@ -19,7 +19,7 @@
       mode: 0644
     loop:
     - key: conf_apigee_apigee.mgmt.baseurl
-      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_mgmt_port }}/v1"'
     - key: conf_apigee-base_apigee.feature.enableforcerangelimit
       value: '"false"'
     register: ui
@@ -38,7 +38,7 @@
       mode: 0644
     loop:
     - key: mgmt_baseurl
-      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_mgmt_port }}/v1"'
     register: edgeui
 
   - name: restart edge-management-ui

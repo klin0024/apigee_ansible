@@ -12,7 +12,7 @@
   - key: conf_devportal_nginx_listen_port
     value: "{{ apigee_devportal_port }}"
   - key: conf_devportal_ssl_block
-    value: "ssl on; ssl_certificate {{ apigee_devportal_ssl_path }}/server.crt; ssl_certificate_key {{ apigee_devportal_ssl_path }}/server.key; ssl_protocols TLSv1.2;"
+    value: "ssl on; ssl_certificate {{ apigee_devportal_ssl_crt }}; ssl_certificate_key {{ apigee_devportal_ssl_key }}; ssl_protocols TLSv1.2;"
   - key: conf_devportal_http_https_redirect
     value: ""
   - key: conf_devportal_fastcgi_https

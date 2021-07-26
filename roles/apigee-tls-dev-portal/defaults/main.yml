@@ -8,8 +8,10 @@ apigee_edge_installation_path: '{{ apigee_installation_path }}/apigee'
 apigee_nginx_installation_path: '{{ apigee_installation_path }}/nginx'
 
 apigee_devportal_ssl_path: "{{ apigee_edge_installation_path }}/customer/nginx/ssl"
-
-
+apigee_devportal_ssl_key_name: server.key
+apigee_devportal_ssl_crt_name: server.crt
+apigee_devportal_ssl_key: "{{ apigee_devportal_ssl_path }}/{{ apigee_devportal_ssl_key_name }}"
+apigee_devportal_ssl_crt: "{{ apigee_devportal_ssl_path }}/{{ apigee_devportal_ssl_crt_name }}"
 
 apigee_ssl_devportal_key:
 apigee_ssl_devportal_crt:
