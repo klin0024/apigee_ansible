@@ -28,7 +28,7 @@
         mode: 0644
       loop:
       - key: MGMT_URL
-        value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+        value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_mgmt_port }}/v1"'
       - key: PG_HOST
         value: '"{{ apigee_devportal_postgresql_host }}"' 
 
