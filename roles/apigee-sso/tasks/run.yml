@@ -26,7 +26,7 @@
       apigee_ssl_dest_crt: selfsigned.crt
 
   - import_tasks: metadata-file.yml
-    when: apigee_sso_saml_idp_metadata_url is none          
+    when: apigee_sso_profile == "saml" and apigee_sso_saml_idp_metadata_url is none          
 
   - import_role:
       name: apigee-tmp-dir

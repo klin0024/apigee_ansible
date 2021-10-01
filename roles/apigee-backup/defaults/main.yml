@@ -3,6 +3,7 @@
 apigee_component_no_stop:
 - apigee-cassandra
 - apigee-postgresql
+- apigee-drupal-devportal
 
 apigee_component_with_stop:
 - apigee-openldap

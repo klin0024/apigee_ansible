@@ -1,0 +1,138 @@
+#! /bin/bash
+# SYNOPSIS: apigee-all ACTION [EXTRA_ARGS]
+#
+# FLAGS: none
+#
+# ARGUMENTS:
+# ACTION - the operation to perform
+#
+# DESCRIPTION:
+# run apigee-service ACTION on all components.
+#
+# EXIT_STATUS: 0 if success on all components, non-0 otherwise.
+#
+
+FAILURES=()
+
+TEST_DEBUG=${TEST_DEBUG:-false}
+[[ "$TEST_DEBUG" == false ]] || TEST_DEBUG=true
+
+#
+# run the given command verbosely.
+# HACK: omit the directory part when echoing the command.
+#
+vrun()
+{
+    local cmd=${1##*/}
+    echo 1>&2 "+ ${1##*/} ${*:2}"
+    "$@"
+}
+
+# print usage message for the script
+usage()
+{
+    echo 1>&2 "Usage: apigee-all ACTION [EXTRA_ARGS]"
+}
+
+#
+# print names of all components with given prefix (egrep pattern).
+# the external variable APIGEE_ROOT specifies where the components live.
+#
+# the optional second argument is the name of a file of exclude patterns.
+# shellcheck disable=SC2120
+apigee_comps()
+{
+    local prefix=$1
+    find "$APIGEE_ROOT" -maxdepth 1 -type l -name "$prefix*" -print \
+    | sed -e 's,.*/,,' \
+    | sort \
+    | grep -v apigee-monit
+}
+
+# return true if the given component supports the given action.
+comp_has_action()
+{
+    local comp=$1 act=$2
+    "$APIGEE_SERVICE" "$comp" has_action "$act"
+}
+
+# invoke apigee-service action on all components with given prefix.
+one_prefix()
+{
+    local prefix=$1; shift
+    local act=$1
+    local comp
+    "$TEST_DEBUG" && echo 1>&2 "# in one_prefix $prefix $*"
+    for comp in $(apigee_comps "$prefix"); do
+	if ! comp_has_action "$comp" "$act"; then
+	    # skip if the component does not support this action.
+	    continue
+	fi
+	"$TEST_DEBUG" && echo 1>&2 "# - $comp"
+        if ! "$MOCK_PREFIX" "$APIGEE_SERVICE" "$comp" "$@"; then
+            FAILURES+=("$comp")
+        fi
+    done
+}
+
+#
+# call our action on all components whose names begin
+# with the given prefixes.
+# handle the prefixes in the order given.
+#
+call_by_prefix()
+{
+    local pref
+    "$TEST_DEBUG" && echo 1>&2 "# in call_by_prefix $*"
+    for pref in "$@"; do
+        one_prefix "$pref" "$ACTION" "${EXTRA_ACTION_ARGS[@]}"
+    done
+}
+
+#
+# return true if the script is being run as opp to dotted in for testing.
+# the first argument is the $0 from the mainline code.
+#
+running()
+{
+    [[ "${1##*/}" == "${BASH_SOURCE[0]##*/}" ]]
+}
+
+# mainline code is put into a function, to facilitate testing.
+main()
+{
+    "$TEST_DEBUG" && echo 1>&2 "# in main, args=[$*]"
+    PROGNAME=${0##*/}
+    APIGEE_ROOT=${APIGEE_ROOT:-$(cd -P "$PROGDIR/../.." && /bin/pwd)}
+    MOCK_PREFIX=${MOCK_PREFIX:-vrun}
+
+    # get arguments
+    ACTION=$1; shift
+    EXTRA_ACTION_ARGS=("$@")
+
+    if [[ -z "$ACTION" ]]; then
+	usage
+	exit 1
+    fi
+
+    #
+    # If stopping or killing, do "edge" components first.
+    # otherwise, do "apigee" components first.
+    #
+    case "$ACTION" in
+    stop|kill|decommission) call_by_prefix "edge-" "baas-" "apigee-" ;;
+    *)         call_by_prefix "apigee-" "baas-" "edge-" ;;
+    esac
+
+    NFAIL=${#FAILURES[*]}
+    if ((NFAIL > 0)); then
+	echo 1>&2 "$PROGNAME: Error: $ACTION failed on [${FAILURES[*]}]"
+	exit 1
+    fi
+    exit 0
+}
+
+# ----- start of mainline code
+PROGDIR=$(cd "$(dirname "$0")" && /bin/pwd)
+APIGEE_SERVICE=$PROGDIR/apigee-service
+if running "$0"; then main "$@"; fi
