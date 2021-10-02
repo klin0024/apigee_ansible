@@ -11,16 +11,21 @@
   - name: set ui properties
     lineinfile:
       dest: /opt/apigee/customer/application/ui.properties
-      regexp: "^{{ item.key }}=.*"
+      regexp: "^{{ item.regexp }}=.*"
       line: "{{ item.key }}={{ item.value }}"
       create: true
       owner: apigee
       group: apigee
       mode: 0644
     loop:
-    - key: conf_apigee_apigee.mgmt.baseurl
-      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_mgmt_port }}/v1"'
-    - key: conf_apigee-base_apigee.feature.enableforcerangelimit
+    - regexp: conf_apigee_apigee.mgmt.baseurl
+      key: conf_apigee_apigee.mgmt.baseurl
+      value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
+    - regexp: conf/application.conf\+play.ws.ssl.loose.acceptAnyCertificate
+      key: conf/application.conf+play.ws.ssl.loose.acceptAnyCertificate
+      value: '"true"'
+    - regexp: conf_apigee-base_apigee.feature.enableforcerangelimit
+      key: conf_apigee-base_apigee.feature.enableforcerangelimit
       value: '"false"'
     register: ui
 

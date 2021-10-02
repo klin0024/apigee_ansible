@@ -25,11 +25,11 @@
         value: '"{{ apigee_ms_scheme }}://{{ apigee_msip }}:{{ apigee_tls_ms_port }}/v1"'
       - regexp: conf/application.conf\+play.ws.ssl.loose.acceptAnyCertificate
         key: conf/application.conf+play.ws.ssl.loose.acceptAnyCertificate
-        value: "true"
+        value: '"true"'
       - regexp: conf_apigee-base_apigee.feature.enableforcerangelimit
         key: conf_apigee-base_apigee.feature.enableforcerangelimit
         value: '"false"'
-      register: edgeui
+      register: ui
 
     - name: restart ui
       command: /opt/apigee/apigee-service/bin/apigee-service edge-ui restart
