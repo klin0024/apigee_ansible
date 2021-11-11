@@ -20,7 +20,7 @@
       vars:
         apigee_ssl_key: "{{ apigee_ssl_edgeui_key }}"
         apigee_ssl_crt: "{{ apigee_ssl_edgeui_crt }}"
-        apigee_ssl_dest_path: "{{ apigee_imanagement_ui_tls_path }}"
+        apigee_ssl_dest_path: "{{ apigee_management_ui_tls_path }}"
         apigee_ssl_dest_key: server.key
         apigee_ssl_dest_crt: server.crt   
 

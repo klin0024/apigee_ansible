@@ -2,7 +2,7 @@
 - name: Copy ssl key
   copy:
     src: '{{ apigee_ssl_edgeui_key }}'
-    dest: '{{ apigee_imanagement_ui_tls_path }}/server.key'
+    dest: '{{ apigee_management_ui_tls_path }}/server.key'
     owner: apigee
     group: apigee
     mode: 0600
@@ -10,7 +10,7 @@
 - name: Copy ssl certificate
   copy:
     src: '{{ apigee_ssl_edgeui_crt }}'
-    dest: '{{ apigee_imanagement_ui_tls_path }}/server.crt'
+    dest: '{{ apigee_management_ui_tls_path }}/server.crt'
     owner: apigee
     group: apigee
     mode: 0600    

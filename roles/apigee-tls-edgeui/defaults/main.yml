@@ -13,11 +13,13 @@ apigee_management_ui_port: 3001
 
 apigee_management_ui_tls_offload: "n"
 
-apigee_imanagement_ui_tls_path: "{{ apigee_edge_installation_path }}/customer/application/edge-management-ui"
-apigee_imanagement_ui_tls_key_file: "{{ apigee_imanagement_ui_tls_path }}/server.key"
-apigee_imanagement_ui_tls_cert_file: "{{ apigee_imanagement_ui_tls_path }}/server.crt"
+apigee_management_ui_tls_path: "{{ apigee_edge_installation_path }}/customer/application/edge-management-ui"
+apigee_management_ui_tls_key_file: "{{ apigee_management_ui_tls_path }}/server.key"
+apigee_management_ui_tls_cert_file: "{{ apigee_management_ui_tls_path }}/server.crt"
 
 
 
 apigee_ssl_edgeui_key:
 apigee_ssl_edgeui_crt:
+
+apigee_management_ui_tls_allowed_ciphers: TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256

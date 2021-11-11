@@ -1,7 +1,7 @@
 ---
-- name: Create {{ apigee_imanagement_ui_tls_path }}
+- name: Create {{ apigee_management_ui_tls_path }}
   file:
-    path: '{{ apigee_imanagement_ui_tls_path }}'
+    path: '{{ apigee_management_ui_tls_path }}'
     state: directory
     owner: apigee
     group: apigee
