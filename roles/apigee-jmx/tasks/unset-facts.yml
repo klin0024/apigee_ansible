@@ -1,0 +1,4 @@
+---
+- name: unset apigee_jmx_opts
+  set_fact:
+    apigee_jmx_opts: ""

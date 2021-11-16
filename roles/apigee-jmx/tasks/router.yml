@@ -1,4 +1,6 @@
 ---
+- import_tasks: unset-facts.yml
+
 - name: set apigee_jmx_opts facts
   set_fact:
     apigee_jmx_opts: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port={{ apigee_router_jmx_port }} -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false" 
