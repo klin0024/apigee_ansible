@@ -43,10 +43,18 @@ usage()
 apigee_comps()
 {
     local prefix=$1
-    find "$APIGEE_ROOT" -maxdepth 1 -type l -name "$prefix*" -print \
-    | sed -e 's,.*/,,' \
-    | sort \
-    | grep -v apigee-monit
+    if [ "$prefix" = "apigee-monit" ]
+    then
+    	find "$APIGEE_ROOT" -maxdepth 1 -type l -name "$prefix*" -print \
+    	| sed -e 's,.*/,,' \
+    	| sort \
+    	| grep apigee-monit
+    else	
+	    find "$APIGEE_ROOT" -maxdepth 1 -type l -name "$prefix*" -print \
+	    | sed -e 's,.*/,,' \
+	    | sort \
+	    | grep -v apigee-monit
+	fi    
 }
 
 # return true if the given component supports the given action.
@@ -120,8 +128,8 @@ main()
     # otherwise, do "apigee" components first.
     #
     case "$ACTION" in
-    stop|kill|decommission) call_by_prefix "edge-" "baas-" "apigee-" ;;
-    *)         call_by_prefix "apigee-" "baas-" "edge-" ;;
+    stop|kill|decommission) call_by_prefix "apigee-monit" "edge-" "baas-" "apigee-" ;;
+    *)         call_by_prefix "apigee-" "baas-" "edge-" "apigee-monit" ;;
     esac
 
     NFAIL=${#FAILURES[*]}
