@@ -23,9 +23,9 @@
     state: present
 
 - name: Setup apigee sso servers
-  shell: '{{ apigee_setup_path }} -f {{ apigee_sso_response_path }} -p sso && touch /opt/apigee/customer/.setup-finished/sso/sso'
-  args:
-    creates: /opt/apigee/customer/.setup-finished/sso/sso
+  shell: '{{ apigee_setup_path }} -f {{ apigee_sso_response_path }} -p sso'
+  #args:
+  #  creates: /opt/apigee/customer/.setup-finished/sso/sso
 
 - import_tasks: setup-ssoadminapi.yml
 

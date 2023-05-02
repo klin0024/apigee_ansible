@@ -23,9 +23,9 @@
     state: present
 
 - name: Setup apigee edgeui servers
-  shell: '{{ apigee_setup_path }} -p ue -f {{ apigee_edgeui_response_path }} && touch /opt/apigee/customer/.setup-finished/edgeui/edgeui'
-  args:
-    creates: /opt/apigee/customer/.setup-finished/edgeui/edgeui
+  shell: '{{ apigee_setup_path }} -p ue -f {{ apigee_edgeui_response_path }}'
+  #args:
+  #  creates: /opt/apigee/customer/.setup-finished/edgeui/edgeui
 
 - name: Enable automatic start
   command: /opt/apigee/apigee-service/bin/apigee-all enable_autostart
