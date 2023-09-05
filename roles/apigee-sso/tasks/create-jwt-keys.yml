@@ -26,5 +26,10 @@
     args:
       chdir: "{{ apigee_sso_jwt_installation_path }}"
 
+  - name: Chown Apigee
+    shell: "chown -R apigee.apigee *"
+    args:
+      chdir: "{{ apigee_sso_jwt_installation_path }}"    
+
   become: yes
   #when: key.stat.exists == False

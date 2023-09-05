@@ -54,9 +54,9 @@
       - regexp: conf/jvmsecurity.properties\+jdk.tls.disabledAlgorithms
         key: conf/jvmsecurity.properties+jdk.tls.disabledAlgorithms
         value: SSLv3, TLSv1, TLSv1.1
-      - regexp: conf_message-processor-communication_local.http.ssl.ciphers
-        key: conf_message-processor-communication_local.http.ssl.ciphers
-        value: TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+      #- regexp: conf_message-processor-communication_local.http.ssl.ciphers
+      #  key: conf_message-processor-communication_local.http.ssl.ciphers
+      #  value: TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
       register: message_processor
 
     - name: restart message processor

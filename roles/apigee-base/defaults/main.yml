@@ -11,5 +11,5 @@ apigee_releases_with_epel:
 apigee_install_epel: true
 
 apigee_yum_utils:
-  - yum-plugin-priorities
+  #- yum-plugin-priorities
   - yum-utils
