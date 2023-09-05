@@ -24,6 +24,7 @@
       apigee_ssl_dest_path: "{{ apigee_sso_saml_installation_path }}"
       apigee_ssl_dest_key: server.key
       apigee_ssl_dest_crt: selfsigned.crt
+    when: apigee_sso_profile == "saml"  
 
   - import_tasks: metadata-file.yml
     when: apigee_sso_profile == "saml" and apigee_sso_saml_idp_metadata_url is none          
